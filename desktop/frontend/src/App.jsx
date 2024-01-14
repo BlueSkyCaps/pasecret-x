@@ -1,13 +1,11 @@
 import {useState} from 'react';
 import {Greet} from "../wailsjs/go/main/App";
-import {Button, Col, FloatButton, Layout, Row, Tabs} from "antd";
+import {Button, Col, FloatButton, Input, Layout, Row, Space, Tabs} from "antd";
 import {HomeTwoTone, SearchOutlined, SettingTwoTone} from "@ant-design/icons";
 import Home from "./Home.jsx";
 import Setting from "./Setting.jsx";
 import {Content, Header} from "antd/es/layout/layout.js";
 import Search from "antd/es/input/Search.js";
-import SettingFloatButton from "./com/SettingFloatButton.jsx";
-import HomeFloatButton from "./com/HomeFloatButton.jsx";
 
 function tabsInit(){
     return [
@@ -39,8 +37,11 @@ function App() {
     }
     return (
         <div>
-            {homeBtnHidden? <HomeFloatButton onClickHandle={()=>{tabChange("1")}}/>:
-                <SettingFloatButton onClickHandle={()=>{tabChange("2")}}/>}}
+            {homeBtnHidden?
+                <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 24,top:3 }}
+                                         type="default" shape="circle" icon={<HomeTwoTone />}  />:
+                <FloatButton onClick={()=>{tabChange("2")}} size="small" style={{ right:24, top:3 }}
+                                        type="default" shape="circle" icon={<SettingTwoTone />}  />}
             <Layout>
                 <Header
                     style={{
@@ -48,7 +49,7 @@ function App() {
                         top: 0,
                         zIndex: 1,
                         width: '100%',
-                        height: '45px',
+                        height: '43px',
                         display: 'flex',
                         padding:"0px",
                         alignItems: 'center',
@@ -65,7 +66,6 @@ function App() {
                             }}
                         />
                     </div>
-
                 </Header>
                 <Content >
                     <Tabs
