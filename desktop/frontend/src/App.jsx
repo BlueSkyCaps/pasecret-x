@@ -1,7 +1,11 @@
 import {useState} from 'react';
 import {Greet} from "../wailsjs/go/main/App";
-import {Button, Col, FloatButton, Input, Layout, Row, Space, Tabs} from "antd";
-import {HomeTwoTone, SearchOutlined, SettingTwoTone} from "@ant-design/icons";
+import {FloatButton, Layout, Tabs} from "antd";
+import {
+    PlusOutlined,
+    SettingOutlined,
+    UnorderedListOutlined
+} from "@ant-design/icons";
 import Home from "./Home.jsx";
 import Setting from "./Setting.jsx";
 import {Content, Header} from "antd/es/layout/layout.js";
@@ -39,9 +43,9 @@ function App() {
         <div>
             {homeBtnHidden?
                 <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 24,top:3 }}
-                                         type="default" shape="circle" icon={<HomeTwoTone />}  />:
+                                         type="default" shape="circle" icon={<UnorderedListOutlined />}  />:
                 <FloatButton onClick={()=>{tabChange("2")}} size="small" style={{ right:24, top:3 }}
-                                        type="default" shape="circle" icon={<SettingTwoTone />}  />}
+                                        type="default" shape="circle" icon={<SettingOutlined/>}  />}
             <Layout>
                 <Header
                     style={{
@@ -57,6 +61,8 @@ function App() {
                     }}
                 >
                     <div style={{height:"32px"}} hidden={homeBtnHidden}>
+                        <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 70,top:3 }}
+                                     type="default" shape="circle" icon={<PlusOutlined />}  />
                         <Search
                             placeholder="搜索密码项"
                             allowClear

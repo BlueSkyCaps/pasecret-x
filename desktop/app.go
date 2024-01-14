@@ -21,7 +21,7 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	// 设置最小窗口大小
-	runtime.WindowSetMinSize(ctx, 700, 500)
+	runtime.WindowSetMinSize(ctx, 1000, 700)
 }
 
 // Greet returns a greeting for the given name
