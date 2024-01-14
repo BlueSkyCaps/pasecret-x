@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@ant-design/icons": "^5.2.6",
+    "antd": "^5.13.0",
+    "react-stickynode": "^4.1.1"
+  }
+}
