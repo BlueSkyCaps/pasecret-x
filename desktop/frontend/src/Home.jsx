@@ -6,17 +6,17 @@ import DirectoryListRender from "./com/DirectoryListRender.jsx";
 function Home() {
     const data = [
         {
-        key: '1',
-        title: 'John Brown',
-        description: 'New York No. 1 Lake Park',
+            id: '1',
+            title: 'John Brown',
+            description: 'New York No. 1 Lake Park',
         },
         {
-            key: '2',
+            id: '2',
             title: 'John Brown22',
             description: 'New York No. 1 Lake Park22',
         },
         {
-            key: '2',
+            id: '3',
             title: 'John Brown22',
             description: 'New York No. 1 Lake Park22',
         },
