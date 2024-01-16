@@ -2,8 +2,9 @@ import {Card, Col} from "antd";
 import {DeleteOutlined, EditOutlined, InfoOutlined} from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import {useState} from "react";
-import infoModal from "./InfoModal";
-import InfoModal from "./InfoModal";
+import infoModal from "./DirectoryInfoModal.jsx";
+import DirectoryInfoModal from "./DirectoryInfoModal.jsx";
+import DirectoryEditModal from "./DirectoryEditModal.jsx";
 
 function DirectoryListRender({ds}) {
     // card底部icon按钮被点击会触发整个card被点击，因此设一个flag来控制：如果点击了icon就不触发后续的card被点击事件
@@ -30,6 +31,12 @@ function DirectoryListRender({ds}) {
         oneIconClickedFlag = true;
         if (oneIconClickedFlag){
             alert("You clicked on oneEditIconClickHandler "+ id)
+            setEditModalOpen(true)
+            setModalDisplayData({
+                title: "edit",
+                okText: "确定",
+                content: "This is the info modal"
+            })
         }
     }
 
@@ -49,7 +56,9 @@ function DirectoryListRender({ds}) {
 
     return(
         <>
-            <InfoModal isModalOpen={infoModalOpen} setIsModalOpen={setInfoModalOpen} modalDisplayData={modalDisplayData}/>
+            {/*按钮模态框，点击时显示*/}
+            <DirectoryInfoModal isModalOpen={infoModalOpen} setIsModalOpen={setInfoModalOpen} modalDisplayData={modalDisplayData}/>
+            <DirectoryEditModal isModalOpen={editModalOpen} setIsModalOpen={setEditModalOpen} modalDisplayData={modalDisplayData}/>
             {
                 ds.map(b=>(
                     <Col key={b.id} span={8}>

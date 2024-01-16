@@ -1,6 +1,6 @@
 import {Modal} from "antd";
 
-const InfoModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
+const DirectoryInfoModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
     const handleOk = () => {
         setIsModalOpen(false);
     };
@@ -16,4 +16,4 @@ const InfoModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
         </>
     );
 };
-export default InfoModal;
+export default DirectoryInfoModal;
