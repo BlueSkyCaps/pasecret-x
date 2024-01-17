@@ -1,4 +1,4 @@
-function Setting() {
+function TabsSetting() {
   return (
     <div>
       <h1>Setting!</h1>
@@ -13,4 +13,4 @@ function Setting() {
   );
 }
 
-export default Setting
+export default TabsSetting

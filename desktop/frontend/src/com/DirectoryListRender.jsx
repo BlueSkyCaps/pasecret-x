@@ -5,10 +5,12 @@ import {useState} from "react";
 import infoModal from "./DirectoryInfoModal.jsx";
 import DirectoryInfoModal from "./DirectoryInfoModal.jsx";
 import DirectoryEditModal from "./DirectoryEditModal.jsx";
+import {useNavigate} from "react-router-dom";
 
 function DirectoryListRender({ds}) {
     // card底部icon按钮被点击会触发整个card被点击，因此设一个flag来控制：如果点击了icon就不触发后续的card被点击事件
     let oneIconClickedFlag = false
+    let navigate = useNavigate();
     const [infoModalOpen, setInfoModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [delModalOpen, setDelModalOpen] = useState(false);
@@ -52,6 +54,8 @@ function DirectoryListRender({ds}) {
             return
         }
         alert("You clicked on oneDirectoryClickHandler")
+        navigate("/directory-items")
+
     }
 
     return(

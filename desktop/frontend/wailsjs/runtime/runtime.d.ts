@@ -142,12 +142,12 @@ export function WindowGetSize(): Promise<Size>;
 
 // [WindowSetMaxSize](https://wails.io/docs/reference/runtime/window#windowsetmaxsize)
 // Sets the maximum window size. Will resize the window if the window is currently larger than the given dimensions.
-// Setting a size of 0,0 will disable this constraint.
+// TabsSetting a size of 0,0 will disable this constraint.
 export function WindowSetMaxSize(width: number, height: number): void;
 
 // [WindowSetMinSize](https://wails.io/docs/reference/runtime/window#windowsetminsize)
 // Sets the minimum window size. Will resize the window if the window is currently smaller than the given dimensions.
-// Setting a size of 0,0 will disable this constraint.
+// TabsSetting a size of 0,0 will disable this constraint.
 export function WindowSetMinSize(width: number, height: number): void;
 
 // [WindowSetPosition](https://wails.io/docs/reference/runtime/window#windowsetposition)

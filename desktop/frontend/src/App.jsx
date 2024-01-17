@@ -6,20 +6,22 @@ import {
     SettingOutlined,
     UnorderedListOutlined
 } from "@ant-design/icons";
-import Home from "./Home.jsx";
-import Setting from "./Setting.jsx";
+import TabsDirectories from "./TabsDirectories.jsx";
+import TabsSetting from "./TabsSetting.jsx";
 import {Content, Header} from "antd/es/layout/layout.js";
 import Search from "antd/es/input/Search.js";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import DirectoryItems from "./com/DirectoryItems.jsx";
 
 function tabsInit(){
     return [
         {
             key: "1",
-            children: <Home />,
+            children: <TabsDirectories />,
         },
         {
             key: "2",
-            children: <Setting/>,
+            children: <TabsSetting/>,
         }
     ]
 }
@@ -74,13 +76,22 @@ function App() {
                     </div>
                 </Header>
                 <Content >
-                    <Tabs
-                        activeKey={activeKey}
-                        size="small"
-                        type="line"
-                        tabPosition="bottom"
-                        items={tabsInit()}
-                    />
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Tabs
+                                activeKey={activeKey}
+                                size="small"
+                                type="line"
+                                tabPosition="bottom"
+                                items={tabsInit()}
+                            />} />
+                            <Route path="/directory-items" element={<DirectoryItems />} />
+                        </Routes>
+
+
+                    </BrowserRouter>
+
+                    <div></div>
                 </Content>
             </Layout>
         </div>

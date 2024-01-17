@@ -3,7 +3,7 @@ import {DeleteOutlined, EditOutlined, EllipsisOutlined, InfoOutlined, SettingOut
 import Meta from "antd/es/card/Meta.js";
 import DirectoryListRender from "./com/DirectoryListRender.jsx";
 
-function Home() {
+function TabsDirectories() {
     const data = [
         {
             id: '1',
@@ -33,4 +33,4 @@ function Home() {
   );
 }
 
-export default Home
+export default TabsDirectories
