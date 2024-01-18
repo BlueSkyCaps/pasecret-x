@@ -3,7 +3,9 @@ import {DeleteOutlined, EditOutlined, EllipsisOutlined, InfoOutlined, SettingOut
 import Meta from "antd/es/card/Meta.js";
 import DirectoryListRender from "./com/DirectoryListRender.jsx";
 
-function TabsDirectories() {
+// 接受父组件传递的tabChangeByDirectoryClick回调函数 再次传给子组件DirectoryListRender
+// 当点击了某个归类夹 将tabs key激活为3 显示密码项界面
+function TabsDirectories({tabChangeByDirectoryClick}) {
     const data = [
         {
             id: '1',
@@ -25,7 +27,7 @@ function TabsDirectories() {
     <div>
         {/*如果一个 row 中的 col 总和超过 24，那么多余的 col 会作为一个整体另起一行排列。 span={8} 3个一行凑够24*/}
         <Row gutter={[16,16]}>
-            <DirectoryListRender ds={data}/>
+            <DirectoryListRender ds={data} tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>
         </Row>
 
       {/* Add more components and content here */}

@@ -10,24 +10,29 @@ import TabsDirectories from "./TabsDirectories.jsx";
 import TabsSetting from "./TabsSetting.jsx";
 import {Content, Header} from "antd/es/layout/layout.js";
 import Search from "antd/es/input/Search.js";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import DirectoryItems from "./com/DirectoryItems.jsx";
-
-function tabsInit(){
-    return [
-        {
-            key: "1",
-            children: <TabsDirectories />,
-        },
-        {
-            key: "2",
-            children: <TabsSetting/>,
-        }
-    ]
-}
+import TabsDirectoryItems from "./TabsDirectoryItems.jsx";
 
 
 function App() {
+    function tabsInit(){
+        return [
+            {
+                // 归类夹界面
+                key: "1",
+                children: <TabsDirectories tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>,
+            },
+            {
+                // 设置界面
+                key: "2",
+                children: <TabsSetting/>,
+            },
+            {
+                // 归类夹中的密码项界面
+                key: "3",
+                children: <TabsDirectoryItems/>,
+            }
+        ]
+    }
     const [activeKey, setActiveKey] = useState('1');
     const [homeBtnHidden, setHomeBtnHidden] = useState(false);
     function onSearch() {
@@ -41,8 +46,14 @@ function App() {
             setHomeBtnHidden(false)
         }
     }
+    // 用于给子组件进行调用的回调函数，点击了某归类夹时，将tabs key激活为3 显示密码项界面
+    function tabChangeByDirectoryClick() {
+        setActiveKey("3")
+    }
+
     return (
         <div>
+            {/*打开归类夹界面或者设置界面*/}
             {homeBtnHidden?
                 <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 24,top:3 }}
                                          type="default" shape="circle" icon={<UnorderedListOutlined />}  />:
@@ -76,22 +87,13 @@ function App() {
                     </div>
                 </Header>
                 <Content >
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<Tabs
-                                activeKey={activeKey}
-                                size="small"
-                                type="line"
-                                tabPosition="bottom"
-                                items={tabsInit()}
-                            />} />
-                            <Route path="/directory-items" element={<DirectoryItems />} />
-                        </Routes>
-
-
-                    </BrowserRouter>
-
-                    <div></div>
+                    <Tabs
+                        activeKey={activeKey}
+                        size="small"
+                        type="line"
+                        tabPosition="bottom"
+                        items={tabsInit()}
+                    />
                 </Content>
             </Layout>
         </div>
