@@ -7,3 +7,8 @@ html {
 
 body {
 }
+
+.delItemBtn:hover {
+    background-color: orangered;
+    opacity:0.7;
+}

@@ -2,7 +2,6 @@ import {Card, Col} from "antd";
 import {DeleteOutlined, EditOutlined, InfoOutlined} from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import {useState} from "react";
-import infoModal from "./DirectoryInfoModal.jsx";
 import DirectoryInfoModal from "./DirectoryInfoModal.jsx";
 import DirectoryEditModal from "./DirectoryEditModal.jsx";
 
@@ -53,7 +52,7 @@ function DirectoryListRender({ds,tabChangeByDirectoryClick}) {
         }
         alert("You clicked on oneDirectoryClickHandler")
         // 调用父组件传来的方法 将tabs key激活为"3" 显示密码项界面
-        tabChangeByDirectoryClick()
+        tabChangeByDirectoryClick("3")
 
     }
 

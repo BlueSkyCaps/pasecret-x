@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {Greet} from "../wailsjs/go/main/App";
 import {FloatButton, Layout, Tabs} from "antd";
 import {
+    FolderAddOutlined,
     PlusOutlined,
     SettingOutlined,
     UnorderedListOutlined
@@ -19,7 +20,7 @@ function App() {
             {
                 // 归类夹界面
                 key: "1",
-                children: <TabsDirectories tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>,
+                children: <TabsDirectories tabChangeByDirectoryClick={tabChangeBy}/>,
             },
             {
                 // 设置界面
@@ -29,7 +30,7 @@ function App() {
             {
                 // 归类夹中的密码项界面
                 key: "3",
-                children: <TabsDirectoryItems/>,
+                children: <TabsDirectoryItems tabChangeByDirectoryItemsIconClick={tabChangeBy}/>,
             }
         ]
     }
@@ -37,6 +38,9 @@ function App() {
     const [homeBtnHidden, setHomeBtnHidden] = useState(false);
     function onSearch() {
         alert("搜索")
+    }
+    function addDirect(){
+        alert("添加归类夹")
     }
     function tabChange(key) {
         setActiveKey(key)
@@ -46,9 +50,9 @@ function App() {
             setHomeBtnHidden(false)
         }
     }
-    // 用于给子组件进行调用的回调函数，点击了某归类夹时，将tabs key激活为3 显示密码项界面
-    function tabChangeByDirectoryClick() {
-        setActiveKey("3")
+    // 用于给子组件进行调用的回调函数 将tabs key激活 显示指定界面，如密码项界面、归类夹界面
+    function tabChangeBy(key) {
+        setActiveKey(key)
     }
 
     return (
@@ -74,8 +78,8 @@ function App() {
                     }}
                 >
                     <div style={{height:"32px"}} hidden={homeBtnHidden}>
-                        <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 70,top:3 }}
-                                     type="default" shape="circle" icon={<PlusOutlined />}  />
+                        <FloatButton onClick={addDirect} size="small" style={{ right: 70,top:3 }}
+                                     type="default" shape="circle" icon={<FolderAddOutlined />}  />
                         <Search
                             placeholder="搜索密码项"
                             allowClear
