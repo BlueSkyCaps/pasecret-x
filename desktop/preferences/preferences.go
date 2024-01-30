@@ -28,6 +28,7 @@ func GetPreferenceByLocalLang() string {
 }
 
 func PreferenceInit() {
+	// 若用户主目录不存在则先创建
 	if !common.Existed(common.AppDataDir()) {
 		b, err := common.CreateDir(common.AppDataDir())
 		if !b {

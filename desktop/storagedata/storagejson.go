@@ -43,7 +43,7 @@ func load(stoDPath string) {
 	// 解密密码项
 	decLoadedData()
 	// 根据语言环境设置内置归类文件夹显示的文本
-	setCategoryToCartTextByLang()
+	//setCategoryToCartTextByLang()
 }
 
 // 若是内置归类夹，不能删除和编辑。根据当前语言环境设置标题和描述

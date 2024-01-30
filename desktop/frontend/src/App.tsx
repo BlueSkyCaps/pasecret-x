@@ -1,26 +1,30 @@
 import {useState} from 'react';
-import {Greet} from "../wailsjs/go/main/App";
 import {FloatButton, Layout, Tabs} from "antd";
 import {
     FolderAddOutlined,
-    PlusOutlined,
     SettingOutlined,
     UnorderedListOutlined
 } from "@ant-design/icons";
-import TabsDirectories from "./TabsDirectories.jsx";
+import TabsDirectories from "./TabsDirectories";
 import TabsSetting from "./TabsSetting.jsx";
 import {Content, Header} from "antd/es/layout/layout.js";
 import Search from "antd/es/input/Search.js";
 import TabsDirectoryItems from "./TabsDirectoryItems.jsx";
+import {DtoJsonFirst} from "../wailsjs/go/main/App.js";
 
 
 function App() {
+    let [PassDtoReceived,setPassDtoReceived] = useState(null);
+    DtoJsonFirst().then((result) => {
+        setPassDtoReceived(result)
+    });
+
     function tabsInit(){
         return [
             {
                 // 归类夹界面
                 key: "1",
-                children: <TabsDirectories tabChangeByDirectoryClick={tabChangeBy}/>,
+                children: <TabsDirectories data={PassDtoReceived} tabChangeByDirectoryClick={tabChangeBy}/>,
             },
             {
                 // 设置界面

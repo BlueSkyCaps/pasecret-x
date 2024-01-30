@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"desktop/storagedata"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -24,7 +24,6 @@ func (a *App) startup(ctx context.Context) {
 	runtime.WindowSetMinSize(ctx, 1000, 700)
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) DtoJsonFirst() storagedata.PassDto {
+	return storagedata.PassDto{Lang: lang, LoadedItems: loadedItems}
 }
