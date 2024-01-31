@@ -3,3 +3,5 @@
 import {storagedata} from '../models';
 
 export function DtoJsonFirst():Promise<storagedata.PassDto>;
+
+export function GetLockPwdFirst():Promise<string>;

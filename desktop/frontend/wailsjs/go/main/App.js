@@ -5,3 +5,7 @@
 export function DtoJsonFirst() {
   return window['go']['main']['App']['DtoJsonFirst']();
 }
+
+export function GetLockPwdFirst() {
+  return window['go']['main']['App']['GetLockPwdFirst']();
+}

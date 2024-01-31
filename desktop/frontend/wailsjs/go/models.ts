@@ -1,3 +1,22 @@
+export namespace preferences {
+	
+	export class Preferences {
+	    lockPwd: string;
+	    localLang: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Preferences(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.lockPwd = source["lockPwd"];
+	        this.localLang = source["localLang"];
+	    }
+	}
+
+}
+
 export namespace storagedata {
 	
 	export class Category {
@@ -83,7 +102,7 @@ export namespace storagedata {
 	}
 	export class PassDto {
 	    loadedItems: LoadedItems;
-	    lang: string;
+	    preferences: preferences.Preferences;
 	
 	    static createFrom(source: any = {}) {
 	        return new PassDto(source);
@@ -92,7 +111,7 @@ export namespace storagedata {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.loadedItems = this.convertValues(source["loadedItems"], LoadedItems);
-	        this.lang = source["lang"];
+	        this.preferences = this.convertValues(source["preferences"], preferences.Preferences);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

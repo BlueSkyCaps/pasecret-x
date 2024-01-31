@@ -25,5 +25,10 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) DtoJsonFirst() storagedata.PassDto {
-	return storagedata.PassDto{Lang: lang, LoadedItems: loadedItems}
+	return passDto
+}
+
+func (a *App) GetLockPwdFirst() string {
+	return "hh"
+	return passDto.Preferences.LockPwd
 }

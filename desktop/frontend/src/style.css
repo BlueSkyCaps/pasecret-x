@@ -12,3 +12,6 @@ body {
     background-color: orangered;
     opacity:0.7;
 }
+.numberPadding{
+    padding: 10px !important;
+}

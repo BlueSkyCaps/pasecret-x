@@ -16,7 +16,10 @@ import {DtoJsonFirst} from "../wailsjs/go/main/App.js";
 function App() {
     let [PassDtoReceived,setPassDtoReceived] = useState(null);
     DtoJsonFirst().then((result) => {
-        setPassDtoReceived(result)
+        if (PassDtoReceived === null){
+            console.log(result)
+            setPassDtoReceived(result)
+        }
     });
 
     function tabsInit(){

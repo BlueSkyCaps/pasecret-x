@@ -1,6 +1,7 @@
 package main
 
 import (
+	"desktop/common"
 	"desktop/preferences"
 	"desktop/storagedata"
 	"embed"
@@ -13,8 +14,7 @@ import (
 //go:embed all:frontend/dist
 //go:embed all:assets
 var assets embed.FS
-var lang string
-var loadedItems storagedata.LoadedItems
+var passDto storagedata.PassDto
 
 func init() {
 	var err error
@@ -29,7 +29,7 @@ func init() {
 	//}
 	//pi18n.Local12Init(enTomlResource, zhTomlResource)
 	// 获取首选项中的当前语言
-	lang = preferences.GetPreferenceByLocalLang()
+	passDto.Preferences.LocalLang = preferences.GetPreferenceByLocalLang()
 	// 初始化本地存储库 必须再语言本地化Local12Init()后面调用
 	resourceDJson, err := assets.ReadFile("assets/d.json")
 	if err != nil {
@@ -37,7 +37,17 @@ func init() {
 		os.Exit(1)
 		return
 	}
-	loadedItems = storagedata.LoadInit(resourceDJson)
+	passDto.LoadedItems = storagedata.LoadInit(resourceDJson)
+	// 获取锁屏密码
+	passDto.Preferences.LockPwd = preferences.GetPreferenceByLockPwd()
+	// 非空则解密
+	if !common.IsWhiteAndSpace(passDto.Preferences.LockPwd) {
+		aes, err := common.DecryptAES([]byte(common.AppProductKeyAES), passDto.Preferences.LockPwd)
+		if err != nil {
+			passDto.Preferences.LockPwd = aes
+		}
+	}
+
 }
 
 func main() {

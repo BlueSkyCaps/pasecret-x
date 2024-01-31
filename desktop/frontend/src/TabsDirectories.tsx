@@ -1,4 +1,4 @@
-import {Row} from "antd";
+import {Alert, Row, Spin} from "antd";
 import DirectoryListRender from "./com/DirectoryListRender.jsx";
 import {storagedata} from "../wailsjs/go/models";
 // 接受父组件传递的tabChangeByDirectoryClick回调函数 再次传给子组件DirectoryListRender
@@ -6,11 +6,20 @@ import {storagedata} from "../wailsjs/go/models";
 const TabsDirectories: React.FC<{ data: storagedata.PassDto,tabChangeByDirectoryClick:any }> = ({ data,tabChangeByDirectoryClick}) =>(
     <div>
         {/*如果一个 row 中的 col 总和超过 24，那么多余的 col 会作为一个整体另起一行排列。 span={8} 3个一行凑够24*/}
-        <Row gutter={[16,16]}>
             {
-                data==null?<></>:<DirectoryListRender ds={data.loadedItems.category} tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>
+                data==null?
+                    <Spin tip="Loading..." size="large">
+                        <Alert
+                            message="Loading category..."
+                            description="Loading category..."
+                            type="info"
+                        />
+                    </Spin>:
+                    <Row gutter={[16,16]}>
+                        <DirectoryListRender ds={data.loadedItems.category} tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>
+                    </Row>
+
             }
-        </Row>
     </div>
 );
 export default TabsDirectories
