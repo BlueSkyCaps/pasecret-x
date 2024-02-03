@@ -3,6 +3,7 @@ export namespace preferences {
 	export class Preferences {
 	    lockPwd: string;
 	    localLang: string;
+	    sync_branch: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Preferences(source);
@@ -12,6 +13,7 @@ export namespace preferences {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.lockPwd = source["lockPwd"];
 	        this.localLang = source["localLang"];
+	        this.sync_branch = source["sync_branch"];
 	    }
 	}
 
@@ -66,8 +68,6 @@ export namespace storagedata {
 	    }
 	}
 	export class LoadedItems {
-	    // Go type: struct { SyncBranch int "json:\"sync_branch\"" }
-	    global_config: any;
 	    category: Category[];
 	    data: Data[];
 	
@@ -77,7 +77,6 @@ export namespace storagedata {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.global_config = this.convertValues(source["global_config"], Object);
 	        this.category = this.convertValues(source["category"], Category);
 	        this.data = this.convertValues(source["data"], Data);
 	    }

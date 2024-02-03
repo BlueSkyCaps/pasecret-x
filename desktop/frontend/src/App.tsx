@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {FloatButton, Layout, Tabs} from "antd";
 import {
     FolderAddOutlined,
@@ -10,24 +10,23 @@ import TabsSetting from "./TabsSetting.jsx";
 import {Content, Header} from "antd/es/layout/layout.js";
 import Search from "antd/es/input/Search.js";
 import TabsDirectoryItems from "./TabsDirectoryItems.jsx";
-import {DtoJsonFirst} from "../wailsjs/go/main/App.js";
-
+import {useTranslation} from "react-i18next";
+import {PassDtoContext} from "./Core";
+import DirectoryInsertModal from "./com/DirectoryInsertModal.js"
+import { storagedata } from '../wailsjs/go/models';
 
 function App() {
-    let [PassDtoReceived,setPassDtoReceived] = useState(null);
-    DtoJsonFirst().then((result) => {
-        if (PassDtoReceived === null){
-            console.log(result)
-            setPassDtoReceived(result)
-        }
-    });
-
+    // const { PassDtoReceived, setPassDtoReceived } : { PassDtoReceived: storagedata.PassDto, setPassDtoReceived: any }= useContext(PassDtoContext);
+    const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
+    const [insertModalOpen, setInsertModalOpen] = useState(false);
+    const [modalDisplayData, setModalDisplayData] = useState({});
+    const { t } = useTranslation();
     function tabsInit(){
         return [
             {
                 // 归类夹界面
                 key: "1",
-                children: <TabsDirectories data={PassDtoReceived} tabChangeByDirectoryClick={tabChangeBy}/>,
+                children: <TabsDirectories  tabChangeByDirectoryClick={tabChangeBy}/>,
             },
             {
                 // 设置界面
@@ -42,19 +41,20 @@ function App() {
         ]
     }
     const [activeKey, setActiveKey] = useState('1');
-    const [homeBtnHidden, setHomeBtnHidden] = useState(false);
+    const [homeBtnShow, setHomeBtnShow] = useState(false);
     function onSearch() {
-        alert("搜索")
+        alert(t("SearchWindowTitle"))
     }
+    // 点击添加归类夹按钮，显示模态
     function addDirect(){
-        alert("添加归类夹")
+        setInsertModalOpen(true)
     }
     function tabChange(key) {
         setActiveKey(key)
         if (key === "2"){
-            setHomeBtnHidden(true)
+            setHomeBtnShow(true)
         }else {
-            setHomeBtnHidden(false)
+            setHomeBtnShow(false)
         }
     }
     // 用于给子组件进行调用的回调函数 将tabs key激活 显示指定界面，如密码项界面、归类夹界面
@@ -64,8 +64,10 @@ function App() {
 
     return (
         <div>
+            {/*添加归类夹模态框，点击时显示*/}
+            {insertModalOpen? <DirectoryInsertModal isModalOpen={insertModalOpen} setIsModalOpen={setInsertModalOpen} modalDisplayData={modalDisplayData}/>:null}
             {/*打开归类夹界面或者设置界面*/}
-            {homeBtnHidden?
+            {homeBtnShow?
                 <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 24,top:3 }}
                                          type="default" shape="circle" icon={<UnorderedListOutlined />}  />:
                 <FloatButton onClick={()=>{tabChange("2")}} size="small" style={{ right:24, top:3 }}
@@ -84,7 +86,7 @@ function App() {
                         backgroundColor:"white"
                     }}
                 >
-                    <div style={{height:"32px"}} hidden={homeBtnHidden}>
+                    <div style={{height:"32px"}} hidden={homeBtnShow}>
                         <FloatButton onClick={addDirect} size="small" style={{ right: 70,top:3 }}
                                      type="default" shape="circle" icon={<FolderAddOutlined />}  />
                         <Search

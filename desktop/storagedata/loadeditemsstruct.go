@@ -3,9 +3,6 @@ package storagedata
 import "desktop/preferences"
 
 type LoadedItems struct {
-	GlobalConfig struct {
-		SyncBranch int `json:"sync_branch"`
-	} `json:"global_config"`
 	Category []Category `json:"category"`
 	Data     []Data     `json:"data"`
 }

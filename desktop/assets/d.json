@@ -1,7 +1,4 @@
 {
-  "global_config": {
-    "sync_branch": 0
-  },
   "category": [
     {
       "name": "证件",

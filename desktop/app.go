@@ -29,6 +29,9 @@ func (a *App) DtoJsonFirst() storagedata.PassDto {
 }
 
 func (a *App) GetLockPwdFirst() string {
-	return "hh"
 	return passDto.Preferences.LockPwd
+}
+
+func (a *App) GetLocalLangFirst() string {
+	return passDto.Preferences.LocalLang
 }

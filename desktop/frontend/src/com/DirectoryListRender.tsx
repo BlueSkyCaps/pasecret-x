@@ -1,11 +1,18 @@
-import {Card, Col} from "antd";
 import {DeleteOutlined, EditOutlined, InfoOutlined} from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import {useState} from "react";
 import DirectoryInfoModal from "./DirectoryInfoModal.jsx";
-import DirectoryEditModal from "./DirectoryEditModal.jsx";
-
-function DirectoryListRender({ds,tabChangeByDirectoryClick}) {
+import DirectoryEditModal from "./DirectoryEditModal.js";
+import {useContext} from "react";
+import {PassDtoContext} from "../Core.js";
+import {storagedata} from "../../wailsjs/go/models.js";
+import {Col} from "antd";
+// 解决Card组件无法正常导入：import {Card} from "antd";
+import Card from "antd/lib/card/Card"
+import {useTranslation} from "react-i18next";
+function DirectoryListRender({tabChangeByDirectoryClick}) {
+    const { t } = useTranslation();
+    const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     // card底部icon按钮被点击会触发整个card被点击，因此设一个flag来控制：如果点击了icon就不触发后续的card被点击事件
     let oneIconClickedFlag = false
     const [infoModalOpen, setInfoModalOpen] = useState(false);
@@ -32,9 +39,9 @@ function DirectoryListRender({ds,tabChangeByDirectoryClick}) {
             alert("You clicked on oneEditIconClickHandler "+ id)
             setEditModalOpen(true)
             setModalDisplayData({
-                title: "edit",
-                okText: "确定",
-                content: "This is the info modal"
+                title: t("categoryEditWindowTitle"),
+                okText: t("categoryInsetOkButtonText"),
+                cancelText: t("categoryInsetCancelButtonText"),
             })
         }
     }
@@ -62,7 +69,8 @@ function DirectoryListRender({ds,tabChangeByDirectoryClick}) {
             {infoModalOpen? <DirectoryInfoModal isModalOpen={infoModalOpen} setIsModalOpen={setInfoModalOpen} modalDisplayData={modalDisplayData}/>:null}
             {editModalOpen? <DirectoryEditModal isModalOpen={editModalOpen} setIsModalOpen={setEditModalOpen} modalDisplayData={modalDisplayData}/>:null}
             {
-                ds.map(b=>(
+                /*如果一个 row 中的 col 总和超过 24，那么多余的 col 会作为一个整体另起一行排列。 span={8} 3个一行凑够24*/
+                PassDtoReceived.loadedItems.category.map(b=>(
                     <Col key={b.id} span={8}>
                         <Card
                             style={{ width: 320 }}
@@ -74,7 +82,7 @@ function DirectoryListRender({ds,tabChangeByDirectoryClick}) {
                                 <DeleteOutlined key="delete" onClick={()=>oneDeleteIconClickHandler(`${b.id}`)}/>,
                             ]}>
                             <Meta
-                                title={b.title}
+                                title={b.name}
                                 description={b.description}
                             />
                         </Card>

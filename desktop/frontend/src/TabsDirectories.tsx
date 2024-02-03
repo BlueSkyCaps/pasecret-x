@@ -1,13 +1,16 @@
 import {Alert, Row, Spin} from "antd";
-import DirectoryListRender from "./com/DirectoryListRender.jsx";
+import DirectoryListRender from "./com/DirectoryListRender.js";
 import {storagedata} from "../wailsjs/go/models";
+import {useContext} from "react";
+import {PassDtoContext} from "./Core";
+import {isNullOrEmpty} from "./utils";
 // 接受父组件传递的tabChangeByDirectoryClick回调函数 再次传给子组件DirectoryListRender
-// 当点击了某个归类夹 将tabs key激活为3 显示密码项界面
-const TabsDirectories: React.FC<{ data: storagedata.PassDto,tabChangeByDirectoryClick:any }> = ({ data,tabChangeByDirectoryClick}) =>(
-    <div>
-        {/*如果一个 row 中的 col 总和超过 24，那么多余的 col 会作为一个整体另起一行排列。 span={8} 3个一行凑够24*/}
+const TabsDirectories=({tabChangeByDirectoryClick}) =>{
+    const {PassDtoReceived}=useContext(PassDtoContext);
+    return(
+        <div>
             {
-                data==null?
+                isNullOrEmpty(PassDtoReceived.loadedItems.category)?
                     <Spin tip="Loading..." size="large">
                         <Alert
                             message="Loading category..."
@@ -16,10 +19,11 @@ const TabsDirectories: React.FC<{ data: storagedata.PassDto,tabChangeByDirectory
                         />
                     </Spin>:
                     <Row gutter={[16,16]}>
-                        <DirectoryListRender ds={data.loadedItems.category} tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>
+                        <DirectoryListRender tabChangeByDirectoryClick={tabChangeByDirectoryClick}/>
                     </Row>
 
             }
-    </div>
-);
+        </div>
+    )
+};
 export default TabsDirectories

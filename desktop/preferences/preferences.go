@@ -9,8 +9,9 @@ import (
 )
 
 type Preferences struct {
-	LockPwd   string `json:"lockPwd"`
-	LocalLang string `json:"localLang"`
+	LockPwd    string `json:"lockPwd"`
+	LocalLang  string `json:"localLang"`
+	SyncBranch int    `json:"sync_branch"`
 }
 
 var preferencePath string

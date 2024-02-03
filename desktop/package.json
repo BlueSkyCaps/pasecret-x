@@ -3,6 +3,8 @@
     "@ant-design/icons": "^5.2.6",
     "@types/es6-promise": "^3.3.0",
     "antd": "^5.13.0",
+    "i18next": "^23.8.2",
+    "react-i18next": "^14.0.1",
     "react-router-dom": "^6.21.2",
     "react-stickynode": "^4.1.1"
   }

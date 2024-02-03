@@ -1,7 +1,8 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
 import './style.css'
-import Core from "./Core.jsx";
+import './i18n.js';
+import Core from "./Core.tsx";
 
 const container = document.getElementById('root')
 

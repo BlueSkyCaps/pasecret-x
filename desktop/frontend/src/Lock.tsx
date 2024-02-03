@@ -1,21 +1,27 @@
 import {Button, Col, Progress, Row, Space} from "antd";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import App from "./App";
+import {storagedata} from "../wailsjs/go/models.js";
+import {useTranslation} from "react-i18next";
+import {PassDtoContext} from "./Core";
 let addClickedCounter = 0;
 let addClickedStr = "";
+// function Lock({PassDtoReceived} : { PassDtoReceived: storagedata.PassDto }) {
 function Lock() {
+    const { t } = useTranslation();
+    const {PassDtoReceived} = useContext(PassDtoContext);
     function numberBtnInputHandler(number) {
         addClickedCounter++
         setPercent(addClickedCounter*25)
         addClickedStr+=number;
         if (addClickedCounter>=4){
-            if (addClickedStr==="1234"){
+            if (addClickedStr===PassDtoReceived.preferences.lockPwd){
                 alert(addClickedStr)
                 setPass(true)
                 return
                 // end ignore all logic
             }else {
-                alert("密码错误")
+                // alert("密码错误")
             }
             addClickedCounter=0
             addClickedStr="";
@@ -27,7 +33,7 @@ function Lock() {
     return (
             pass ? <App/>:
             <div>
-                <h4 style={{color:"gray"}}>请解锁</h4>
+                <h4 style={{color:"gray"}}>{t("lockLabelText")}</h4>
                 <Space>
                     <Progress strokeColor="#7ac5cd" showInfo={false} steps={4} percent={percent} size={25} />
                 </Space>
