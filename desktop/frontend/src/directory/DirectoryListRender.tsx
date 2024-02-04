@@ -12,14 +12,13 @@ import Card from "antd/lib/card/Card"
 import {useTranslation} from "react-i18next";
 import {LoadedItemsUpdate} from "../../wailsjs/go/main/App";
 
-function DirectoryListRender({tabChangeByDirectoryClick}) {
+function DirectoryListRender({tabChangeBy}) {
     const { t } = useTranslation();
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     // card底部icon按钮被点击会触发整个card被点击，因此设一个flag来控制：如果点击了icon就不触发后续的card被点击事件
     let oneIconClickedFlag = false
     const [infoModalOpen, setInfoModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [delModalOpen, setDelModalOpen] = useState(false);
     const [modalDisplayData, setModalDisplayData] = useState({});
 
     function oneInfoIconClickHandler(id) {
@@ -88,15 +87,16 @@ function DirectoryListRender({tabChangeByDirectoryClick}) {
             });
         }
     }
-    function oneDirectoryClickHandler() {
+    // 某个归类夹被点击时 开始显示密码项标签Tab界面 渲染当前归类夹下的密码项数据
+    function oneDirectoryClickHandler(id) {
         if (oneIconClickedFlag){
             oneIconClickedFlag = false;
             return
         }
         alert("You clicked on oneDirectoryClickHandler")
         // 调用父组件传来的方法 将tabs key激活为"3" 显示密码项界面
-        tabChangeByDirectoryClick("3")
-
+        // 并且传递当前点击的归类夹id
+        tabChangeBy("3", id)
     }
 
     return(
@@ -111,11 +111,11 @@ function DirectoryListRender({tabChangeByDirectoryClick}) {
                         <Card
                             style={{ width: 320 }}
                             hoverable={true}
-                            onClick={() => {oneDirectoryClickHandler()}}
+                            onClick={() => {oneDirectoryClickHandler(b.id)}}
                             actions={[
-                                <InfoOutlined  key="info" onClick={()=>oneInfoIconClickHandler(`${b.id}`)}/>,
-                                <EditOutlined key="edit" onClick={()=>oneEditIconClickHandler(`${b.id}`)}/>,
-                                <DeleteOutlined key="delete" onClick={()=>oneDeleteIconClickHandler(`${b.id}`)}/>,
+                                <InfoOutlined  key="info" onClick={()=>oneInfoIconClickHandler(b.id)}/>,
+                                <EditOutlined key="edit" onClick={()=>oneEditIconClickHandler(b.id)}/>,
+                                <DeleteOutlined key="delete" onClick={()=>oneDeleteIconClickHandler(b.id)}/>,
                             ]}>
                             <Meta
                                 title={b.name}

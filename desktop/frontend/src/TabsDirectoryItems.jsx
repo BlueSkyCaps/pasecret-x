@@ -1,27 +1,22 @@
-import {Button, FloatButton, List} from "antd";
+import {Button, FloatButton} from "antd";
+import List from "antd/lib/list";
 import {CopyFilled, DeleteFilled, EyeFilled, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
+import {useContext} from "react";
+import {PassDtoContext} from "./Core.tsx";
+import {useTranslation} from "react-i18next";
+import ItemEditModal from "./directory-item/ItemEditModal";
+import ItemInsertModal from "./directory-item/ItemInsertModal";
+import {useState} from "react";
 
 // 密碼項界面
-function TabsDirectoryItems({tabChangeByDirectoryItemsIconClick}) {
-    const data = [
-        {
-            id: '1',
-            name: 'Ant Design Title 1',
-            remark: 'This is a reminder',
-        },
-        {
-            id: '2',
-            name: 'Ant Design Title 2',
-            remark: 'This is a reminder2',
+function TabsDirectoryItems({tabChangeBy, currentCategoryClickedId}) {
+    const { PassDtoReceived, setPassDtoReceived } = useContext(PassDtoContext)
+    const {t} = useTranslation()
+    const [insertModalOpen, setInsertModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [modalDisplayData, setModalDisplayData] = useState({});
+    const data = PassDtoReceived.loadedItems.data.filter((item) => item.category_id === currentCategoryClickedId);
 
-        },
-        {
-            id: '3',
-            name: 'Ant Design Title 3',
-            remark: 'This is a reminder3',
-
-        },
-    ];
     let deleteItemClick = (id) =>{
         console.log("deleteItemClick",id);
     };
@@ -31,16 +26,28 @@ function TabsDirectoryItems({tabChangeByDirectoryItemsIconClick}) {
     let copyItemClick = (id) =>{
         console.log("copyItemClick",id);
     };
+    let addItem= () =>{
+        setInsertModalOpen(true)
+        setModalDisplayData({
+            "cid": currentCategoryClickedId,
+        })
+    };
+
     return(
         <>
+            {/*按钮模态框，点击时显示*/}
+            {insertModalOpen? <ItemInsertModal isModalOpen={insertModalOpen} setIsModalOpen={setInsertModalOpen} modalDisplayData={modalDisplayData}/>:null}
+            {editModalOpen? <ItemEditModal isModalOpen={editModalOpen} setIsModalOpen={setEditModalOpen} modalDisplayData={modalDisplayData}/>:null}
+
             {/* 此按钮为本组件 覆盖 首页归类夹界面的"添加归类夹"按钮 点击时会显示归类夹界面*/}
-            <FloatButton onClick={()=>{tabChangeByDirectoryItemsIconClick("1")}} size="small" style={{ right: 70,top:3 }}
+            <FloatButton onClick={()=>{tabChangeBy("1")}} size="small" style={{ right: 70,top:3 }}
                          type="default" shape="circle" icon={<UnorderedListOutlined />}  />
             {/* 此按钮为本组件添加密码项按钮*/}
-            <FloatButton onClick={()=>{alert("给该归类夹添加密码项")}} size="small" style={{ right: 116,top:3 }}
+            <FloatButton onClick={()=>{addItem()}} size="small" style={{ right: 116,top:3 }}
                          type="default" shape="circle" icon={<PlusOutlined />}  />
             <List
                 itemLayout="horizontal"
+                locale={{emptyText: t("categoryNoItems")}}
                 dataSource={data}
                 renderItem={(item, index) => (
                     <List.Item
@@ -52,7 +59,7 @@ function TabsDirectoryItems({tabChangeByDirectoryItemsIconClick}) {
                         }>
                         <List.Item.Meta
                             title={<a href="https://ant.design">{item.name}</a>}
-                            description={item.remark}
+                            description={item.description}
                         />
                     </List.Item>
                 )}

@@ -6,14 +6,6 @@ export function DtoJsonFirst() {
   return window['go']['main']['App']['DtoJsonFirst']();
 }
 
-export function GetLocalLangFirst() {
-  return window['go']['main']['App']['GetLocalLangFirst']();
-}
-
-export function GetLockPwdFirst() {
-  return window['go']['main']['App']['GetLockPwdFirst']();
-}
-
 export function LoadedItemsUpdate(arg1) {
   return window['go']['main']['App']['LoadedItemsUpdate'](arg1);
 }
