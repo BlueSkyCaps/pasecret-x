@@ -3,11 +3,9 @@ package storagedata
 
 import (
 	"desktop/common"
-	"desktop/pi18n"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"os"
-	"strconv"
 )
 
 var StoDPath string
@@ -42,31 +40,9 @@ func load(stoDPath string) {
 	}
 	// 解密密码项
 	decLoadedData()
-	// 根据语言环境设置内置归类文件夹显示的文本
-	//setCategoryToCartTextByLang()
 }
 
-// 若是内置归类夹，不能删除和编辑。根据当前语言环境设置标题和描述
-func setCategoryToCartTextByLang() {
-	var err error
-	for i := 0; i < len(loadedItems.Category); i++ {
-		var c int
-		c, err = strconv.Atoi(string(loadedItems.Category[i].Id[0]))
-		// 如果cid大於28，一定不是内置归类夹。因为新添加的归类夹id开头是日期形式大于28
-		if len(loadedItems.Category[i].Id) > 28 {
-			continue
-		}
-		// 变量c可以区分国际化文本的message id
-		loadedItems.Category[i].Name = pi18n.LocalizedText(fmt.Sprintf("buildInCategory%dName", c), nil)
-		loadedItems.Category[i].Description = pi18n.LocalizedText(fmt.Sprintf("buildInCategory%dDescription", c), nil)
-	}
-	if err != nil {
-		println("err", "setCategoryToCartTextByLang:"+err.Error())
-		os.Exit(1)
-	}
-}
-
-// 解密所有密码项重新贮存AppRef
+// 解密所有密码项
 func decLoadedData() {
 	var err error
 	for i := 0; i < len(loadedItems.Data); i++ {
@@ -83,27 +59,37 @@ func decLoadedData() {
 	}
 }
 
-//
-//// 加密所有密码项再保存至本地存储库
-//func encryLoadedData() {
-//	var err error
-//	// 加密所有密码项
-//	for i := 0; i < len(AppRef.LoadedItems.Data); i++ {
-//		AppRef.LoadedItems.Data[i].Name, err = common.EncryptAES([]byte(common.AppProductKeyAES), AppRef.LoadedItems.Data[i].Name)
-//		AppRef.LoadedItems.Data[i].Site, err = common.EncryptAES([]byte(common.AppProductKeyAES), AppRef.LoadedItems.Data[i].Site)
-//		AppRef.LoadedItems.Data[i].Remark, err = common.EncryptAES([]byte(common.AppProductKeyAES), AppRef.LoadedItems.Data[i].Remark)
-//		AppRef.LoadedItems.Data[i].Password, err = common.EncryptAES([]byte(common.AppProductKeyAES), AppRef.LoadedItems.Data[i].Password)
-//		AppRef.LoadedItems.Data[i].AccountName, err = common.EncryptAES([]byte(common.AppProductKeyAES), AppRef.LoadedItems.Data[i].AccountName)
-//	}
-//	if err != nil {
-//		dialog.ShowInformation("err", "encryLoadedData, common.EncryptAES:"+err.Error(), AppRef.W)
-//		time.Sleep(time.Millisecond * 5000)
-//		go func() {
-//			time.Sleep(time.Millisecond * 4800)
-//			AppRef.W.Close()
-//		}()
-//	}
-//}
+// EncryLoadedData 加密所有密码项再保存至本地存储库
+func EncryLoadedData(data LoadedItems) error {
+	var err error
+	// 加密所有密码项
+	for i := 0; i < len(data.Data); i++ {
+		data.Data[i].Name, err = common.EncryptAES([]byte(common.AppProductKeyAES), data.Data[i].Name)
+		data.Data[i].Site, err = common.EncryptAES([]byte(common.AppProductKeyAES), data.Data[i].Site)
+		data.Data[i].Remark, err = common.EncryptAES([]byte(common.AppProductKeyAES), data.Data[i].Remark)
+		data.Data[i].Password, err = common.EncryptAES([]byte(common.AppProductKeyAES), data.Data[i].Password)
+		data.Data[i].AccountName, err = common.EncryptAES([]byte(common.AppProductKeyAES), data.Data[i].AccountName)
+	}
+	s := ""
+	if err != nil {
+		s = "err EncryLoadedData, common.EncryptAES:" + err.Error()
+		println(s)
+		return errors.New(s)
+	}
+	marshalDJson, err := json.Marshal(data)
+	if err != nil {
+		s = "err EncryLoadedData, json.Marshal:" + err.Error()
+		println(s)
+		return errors.New(s)
+	}
+	r, err := common.WriteExistedFile(StoDPath, marshalDJson)
+	if !r {
+		s = "err EditCategory WriteExistedFile, json.Marshal:" + err.Error()
+		return errors.New(s)
+	}
+	return nil
+}
+
 //
 //// EditCategory 编辑保存一个归类文件夹
 //func EditCategory(e *common.EditForm, editCi Category, editCard *widget.Card) {

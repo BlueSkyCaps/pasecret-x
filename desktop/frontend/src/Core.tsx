@@ -6,7 +6,6 @@ import {storagedata} from "../wailsjs/go/models";
 import {isNullOrEmpty} from "./utils.js";
 import {useTranslation} from "react-i18next";
 
-export let S_Data: storagedata.PassDto;
 // 创建上下文
 export const PassDtoContext = createContext(null);
 
@@ -22,10 +21,11 @@ export const PassDtoContext = createContext(null);
      const [PassDtoReceived,setPassDtoReceived] = useState<storagedata.PassDto>(null);
      // 获取数据 这些数据已在Go中被解密
      DtoJsonFirst().then((result) => {
+         // 在wails调式模式下，刷新浏览器将会恢复到上一次的数据，因为PassDtoReceived不为空
          if (PassDtoReceived === null){
              setIsGetLockPwd(false)
              setPassDtoReceived(result)
-             console.log(result)
+             console.log("DtoJsonFirst::", result)
          }
      });
      return (

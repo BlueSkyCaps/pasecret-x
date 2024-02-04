@@ -4,24 +4,33 @@ import {storagedata} from "../../wailsjs/go/models.js";
 import {useContext, useState} from "react";
 import {PassDtoContext} from "../Core.js";
 import { useTranslation } from 'react-i18next';
+import {genAscRankId} from "../utils";
+import {DtoJsonFirst, LoadedItemsUpdate} from "../../wailsjs/go/main/App";
 const DirectoryInsertModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     const [name,setName] = useState("")
     const [description,setDescription] = useState("")
     const {t} = useTranslation()
     const onFinish = () => {
-        // message.success('Submit success!');
-        let c = {
+        // 生成id
+        const rank = genAscRankId();
+        const c = {
             "name": name,
             "description": description,
-            "id": "99",
-            "rank": 99,
+            "id": rank,
+            "rank": parseInt(rank),
             "removable": true,
             "renameable": true,
-        }
+        };
+        // 拷贝为副本更新，否则无法监听到改变而渲染
         let newObj = {...PassDtoReceived};
         newObj.loadedItems.category.push(c);
+        // 更新渲染
         setPassDtoReceived(newObj);
+        // 传递给Go存储
+        LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
+            message.error(t("dialogShowErrorTitle")+error.message);
+        });
         handleCancel()
     };
     const onFinishFailed = () => {
@@ -47,14 +56,14 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => 
                     rules={[
                         {
                             required: true,
-                            message: '不得为空'
+                            message: t("categoryInsetNameBlank"),
                         },
                         {
                             type: 'string',
                             min: 1,
                             max: 10,
                             whitespace:true,
-                            message: '归类夹名大于1个字符，小于10个字符，不允许空字符'
+                            message: t("categoryInsetNameLength"),
                         },
                     ]}
                 >
@@ -66,14 +75,14 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => 
                     rules={[
                         {
                             required: true,
-                            message: '不得为空'
+                            message: t("categoryInsetDescriptionBlank"),
                         },
                         {
                             type: 'string',
                             min: 1,
                             max: 24,
                             whitespace:true,
-                            message: '描述大于1个字符，小于24个字符，不允许空字符'
+                            message: t("categoryInsetDescriptionLength")
 
                         },
                     ]}

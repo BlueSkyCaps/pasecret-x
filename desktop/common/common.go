@@ -15,8 +15,6 @@ import (
 
 var D_path = filepath.Join(AppDataDir(), "d.json")
 var Preference_path = filepath.Join(AppDataDir(), "preference.json")
-var I18n_en_path = filepath.Join(AppDataDir(), "pasecret.en.toml")
-var I18n_zh_path = filepath.Join(AppDataDir(), "pasecret.zh.toml")
 
 func AppDataDir() string {
 	homeDir, err := os.UserHomeDir()
@@ -105,12 +103,6 @@ func ReadFileAsBytes(path string) (bool, []byte, error) {
 
 }
 
-type EditForm struct {
-	Name        string
-	Alias       string
-	Description string
-}
-
 func IsWhiteAndSpace(s string) bool {
 	return strings.TrimSpace(s) == ""
 }
@@ -127,19 +119,6 @@ func GenAscRankId() (bool, int) {
 	return true, rank
 }
 
-// SearchDataResultViewModel 用于关键字搜索密码项展示table的视图模型
-type SearchDataResultViewModel struct {
-	VDataName        string
-	VDataAccountName string
-	VDataPassword    string
-	VDataSite        string
-	VDataRemark      string
-	//VDataId           int
-	VDataCategoryName string
-}
-
-// ShowSearchResultCeilWH_ 用于设置关键字搜索密码项展示table的单元格长度。
-//单元格宽高度可以由此填充字符定义，不要使用canvas.Text无法文本换行，不建议使用SetColumnWidth等设置宽高
 var ShowSearchResultCeilWH_ = "xxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxxxxxxx"
 var DonateAliPayUri_ = "http://sto.reminisce.top/OTHER/donate/alipay.jpg"
 var DonateWechatUri_ = "http://sto.reminisce.top/OTHER/donate/wechat.jpg"

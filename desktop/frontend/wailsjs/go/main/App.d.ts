@@ -7,3 +7,5 @@ export function DtoJsonFirst():Promise<storagedata.PassDto>;
 export function GetLocalLangFirst():Promise<string>;
 
 export function GetLockPwdFirst():Promise<string>;
+
+export function LoadedItemsUpdate(arg1:storagedata.LoadedItems):Promise<void>;
