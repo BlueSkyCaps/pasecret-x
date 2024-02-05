@@ -6,6 +6,7 @@ import {PassDtoContext} from "./Core";
 import {isNullOrEmpty} from "./utils";
 // 接受父组件传递的tabChangeBy回调函数 再次传给子组件DirectoryListRender
 const TabsDirectories=({tabChangeBy}) =>{
+    alert("TabsDirectories")
     const {PassDtoReceived}=useContext(PassDtoContext);
     return(
         <div>

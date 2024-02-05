@@ -16,36 +16,44 @@ import DirectoryInsertModal from "./directory/DirectoryInsertModal.js"
 import { storagedata } from '../wailsjs/go/models';
 
 function App() {
-    // const { PassDtoReceived, setPassDtoReceived } : { PassDtoReceived: storagedata.PassDto, setPassDtoReceived: any }= useContext(PassDtoContext);
-    const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     const [insertModalOpen, setInsertModalOpen] = useState(false);
     const [modalDisplayData, setModalDisplayData] = useState({});
     const [currentCategoryClickedId, setCurrentCategoryClickedId] = useState(null);
     const { t } = useTranslation();
-    // tabsInit Tabs标签组件用于初始化此组件界面，更改activeKey来动态切换当前显示的Tab标签
+    /* tabsInit Tabs标签组件用于初始化此组件界面，更改activeKey来动态切换当前显示的Tab标签
+    注意，应该判断activeKey来动态切换Tabs标签，返回只有对应的单独标签元素组件的数组！
+    而不是一次性返回整个Tabs标签组件数组[]！因为这样会出现更新activeKey会导致ant迭代渲染数组中的所有标签组件的问题!
+    即使当前显示的标签组件是正确的
+    */
     function tabsInit(){
-        return [
-            {
-                // 归类夹界面
-                key: "1",
-                children: <TabsDirectories tabChangeBy={tabChangeBy}/>,
-            },
-            {
-                // 设置界面
-                key: "2",
-                children: <TabsSetting/>,
-            },
-            {
-                // 归类夹中的密码项界面
-                key: "3",
-                children: <TabsDirectoryItems tabChangeBy={tabChangeBy} currentCategoryClickedId={currentCategoryClickedId}/>,
-            }
-        ]
+        switch (activeKey) {
+            case  "1":
+                return [
+                    {
+                        // 归类夹界面
+                        key: "1",
+                        children: <TabsDirectories tabChangeBy={tabChangeBy}/>,
+                    }]
+            case  "2":
+                return [{
+                    // 设置界面
+                    key: "2",
+                    children: <TabsSetting/>,
+                }]
+            case   "3":
+                return [
+                    {
+                        // 归类夹中的密码项界面
+                        key: "3",
+                        children: <TabsDirectoryItems tabChangeBy={tabChangeBy} currentCategoryClickedId={currentCategoryClickedId}/>,
+                    }
+                ]
+        }
     }
     const [activeKey, setActiveKey] = useState('1');
     const [homeBtnShow, setHomeBtnShow] = useState(false);
     function onSearch() {
-        alert(t("SearchWindowTitle"))
+
     }
     // 点击添加归类夹按钮，显示模态
     function addDirect(){

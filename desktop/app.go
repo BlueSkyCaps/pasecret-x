@@ -5,6 +5,7 @@ import (
 	"desktop/storagedata"
 	"errors"
 	"fmt"
+	"github.com/jinzhu/copier"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -40,19 +41,16 @@ func (a *App) LoadedItemsUpdate(data *storagedata.LoadedItems) error {
 	}
 	// --dup start 在引用加密更新之前，创建副本给全局变量，否则前端访问全局变量 得到的是引用传递的过后的加密数据
 	tmp := new(storagedata.LoadedItems)
-	for _, i2 := range data.Data {
-		tmp.Data = append(tmp.Data, i2)
-	}
-	for _, i2 := range data.Category {
-		tmp.Category = append(tmp.Category, i2)
+	err := copier.CopyWithOption(tmp, data, copier.Option{DeepCopy: true})
+	if err != nil {
+		return err
 	}
 	// -- dup end
-
-	err := storagedata.EncryLoadedData(*data)
+	err = storagedata.EncryLoadedData(*data)
 	if err == nil {
 		// 更新成功后，别忘了将数据存储到全局变量中，因为前端调用访问的是全局变量
+		// 当然，这里也可以不更新全局变量，因为wails 在调试模式下才允许刷新浏览器，生产模式下不能刷新浏览器，避免了刷新后data是旧值的问题
 		passDto.LoadedItems = *tmp
-		fmt.Println(tmp)
 	}
 	return err
 }

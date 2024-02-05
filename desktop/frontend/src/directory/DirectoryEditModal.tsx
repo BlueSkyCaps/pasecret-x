@@ -4,15 +4,23 @@ import {useContext, useState} from "react";
 import {PassDtoContext} from "../Core.js";
 import { useTranslation } from 'react-i18next';
 import {LoadedItemsUpdate} from "../../wailsjs/go/main/App";
+let preName= ""
 const DirectoryEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     // 找到当前编辑的归类夹元素
     const cs:any = PassDtoReceived.loadedItems.category
     let editC = cs.find((item) => item.id === modalDisplayData["id"]);
+    preName = editC.name
     const [name,setName] = useState(editC.name)
     const [description,setDescription] = useState(editC.description)
     const {t} = useTranslation()
     const onFinish = () => {
+        //判断是否已有相同的名称(但忽略当前设置的和原名称一样的情况)
+        let exited = PassDtoReceived.loadedItems.category.some((item)=>preName !== name.trim()&&item.name===name.trim())
+        if (exited){
+            message.warning(t("categoryExitedTips"))
+            return
+        }
         // 更新当前编辑的归类夹元素，category是数组引用，js中数组是引用传递，
         // 该元素是PassDtoReceived.loadedItems.category中获取到的，所以直接修改即可更新
         editC.name =name
@@ -26,12 +34,12 @@ const DirectoryEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
         handleCancel()
     };
     const onFinishFailed = () => {
-        alert(name)
     };
     const handleOk = () => {
-        setIsModalOpen(false);
+        handleCancel()
     };
     const handleCancel = () => {
+        preName = ""
         setIsModalOpen(false);
     };
     return (

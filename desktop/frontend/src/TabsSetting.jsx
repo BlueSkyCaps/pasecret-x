@@ -1,5 +1,6 @@
 function TabsSetting() {
-  return (
+    alert("TabsSetting")
+    return (
     <div>
       <h1>Setting!</h1>
       <p>This is a sample paragraph.</p>

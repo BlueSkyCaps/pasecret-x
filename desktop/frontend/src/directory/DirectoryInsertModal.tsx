@@ -12,10 +12,15 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => 
     const [description,setDescription] = useState("")
     const {t} = useTranslation()
     const onFinish = () => {
+        let exited = PassDtoReceived.loadedItems.category.some((item)=>item.name===name.trim())
+        if (exited){
+            message.warning(t("categoryExitedTips"))
+            return
+        }
         // 生成id
         const rank = genAscRankId();
         const c = {
-            "name": name,
+            "name": name.trim(),
             "description": description,
             "id": rank,
             "rank": parseInt(rank),
@@ -36,7 +41,7 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => 
     const onFinishFailed = () => {
     };
     const handleOk = () => {
-        setIsModalOpen(false);
+        handleCancel()
     };
     const handleCancel = () => {
         setIsModalOpen(false);

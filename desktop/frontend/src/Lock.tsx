@@ -16,7 +16,6 @@ function Lock() {
         addClickedStr+=number;
         if (addClickedCounter>=4){
             if (addClickedStr===PassDtoReceived.preferences.lockPwd){
-                alert(addClickedStr)
                 setPass(true)
                 return
                 // end ignore all logic

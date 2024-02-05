@@ -3,20 +3,46 @@ import {storagedata} from "../../wailsjs/go/models.js";
 import {useContext, useState} from "react";
 import {PassDtoContext} from "../Core.js";
 import { useTranslation } from 'react-i18next';
-import {LoadedItemsUpdate} from "../../wailsjs/go/main/App";
-const ItemEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
+import { LoadedItemsUpdate} from "../../wailsjs/go/main/App";
+import TextArea from 'antd/es/input/TextArea';
+let tmpEditItem:storagedata.Data|any= {
+    name: '',
+    account_name: '',
+    password: '',
+    site: '',
+    remark: '',
+}
+let preName = ""
+
+const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
-    // 找到当前编辑的归类夹元素
-    const cs:any = PassDtoReceived.loadedItems.category
-    let editC = cs.find((item) => item.id === modalDisplayData["id"]);
-    const [name,setName] = useState(editC.name)
-    const [description,setDescription] = useState(editC.description)
+    const [currentEditItem] = useState<storagedata.Data>(modalDisplayData)
+    preName = modalDisplayData.name
+    tmpEditItem = modalDisplayData
     const {t} = useTranslation()
+    // 当input文本更新时，实时更新当前操作的密码项数据
+    const onChangeHandler = (targetKey, value) => {
+        tmpEditItem[targetKey]=value
+    }
+
     const onFinish = () => {
-        // 更新当前编辑的归类夹元素，category是数组引用，js中数组是引用传递，
-        // 该元素是PassDtoReceived.loadedItems.category中获取到的，所以直接修改即可更新
-        editC.name =name
-        editC.description =description
+        let ds:any = PassDtoReceived.loadedItems.data;
+        // 判断该归类夹下是否已有相同的密码项名称(但忽略当前设置的和原名称一样的情况)
+        let exited = ds.some(item =>item.name === tmpEditItem.name.trim()&&item.category_id===tmpEditItem.category_id)
+        if (exited){
+            if (preName!==tmpEditItem.name.trim()){
+                message.warning(t('dataExitedTips'))
+                return
+            }
+        }
+        // 找到当前编辑的密码项进行更新
+        let editItem = ds.find(item => item.id === modalDisplayData.id);
+        editItem.name= tmpEditItem.name.trim();
+        editItem.account_name = tmpEditItem.account_name;
+        editItem.password = tmpEditItem.password;
+        editItem.site = tmpEditItem.site;
+        editItem.remark = tmpEditItem.remark;
+        console.log("编辑密码项：：", editItem)
         // 更新渲染
         setPassDtoReceived(PassDtoReceived);
         // 传递给Go存储
@@ -26,17 +52,26 @@ const ItemEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
         handleCancel()
     };
     const onFinishFailed = () => {
-        alert(name)
     };
     const handleOk = () => {
-        setIsModalOpen(false);
+        handleCancel()
     };
     const handleCancel = () => {
+        // 取消别忘了重置全局变量 避免下次编辑时仍是之前的值贮存
+        tmpEditItem={
+            name: '',
+            account_name: '',
+            password: '',
+            site: '',
+            remark: '',
+        }
+        preName = ""
         setIsModalOpen(false);
-    };
+    }
+
     return (
         <Modal destroyOnClose={true} cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }} centered={true} maskClosable={false} closeIcon={null}
-               title={t("categoryEditWindowTitle")} open={isModalOpen} >
+               title={t("dataInsertWindowTitle")} open={isModalOpen} >
             <Form
                 layout="vertical"
                 onFinish={onFinish}
@@ -45,47 +80,49 @@ const ItemEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
             >
                 <Form.Item
                     name="name"
-                    label={t("categoryInsetNameLabel")}
-                    /*设置子元素即input的默认值，若在input设置defaultvalue，则有值但不修改会导致rules验证为空不通过*/
-                    initialValue={name}
+                    label={t("dataEditNameLabel")}
+                    initialValue={currentEditItem.name}
                     rules={[
                         {
                             required: true,
-                            message: t("categoryInsetNameBlank"),
+                            message: t("dataEditNameBlank"),
                         },
                         {
                             type: 'string',
-                            min: 1,
-                            max: 10,
                             whitespace:true,
-                            message: t("categoryInsetNameLength"),
+                            message: t("dataEditNameBlank"),
                         },
                     ]}
                 >
-                    <Input placeholder=""
-                           onChange={(e)=>{setName(e.target.value)}}/>
+                    <Input placeholder="" onChange={(e)=>{onChangeHandler("name", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item
-                    name="describe"
-                    label={t("categoryInsetDescriptionLabel")}
-                    initialValue={description}
-                    rules={[
-                        {
-                            required: true,
-                            message: t("categoryInsetDescriptionBlank"),
-                        },
-                        {
-                            type: 'string',
-                            min: 1,
-                            max: 24,
-                            whitespace:true,
-                            message: t("categoryInsetDescriptionLength")
-
-                        },
-                    ]}
+                    name="account_name"
+                    label={t("dataEditDynamicByUsualAccountNameLabel")}
+                    initialValue={currentEditItem.account_name}
                 >
-                    <Input placeholder=""
-                           onChange={(e)=>{setDescription(e.target.value)}}/>
+                    <Input placeholder="" onChange={(e)=>{onChangeHandler("account_name", e.target.value)}}/>
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label={t("dataEditPwdLabel")}
+                    initialValue={currentEditItem.password}
+                >
+                    <Input placeholder="" onChange={(e)=>{onChangeHandler("password", e.target.value)}}/>
+                </Form.Item>
+                <Form.Item
+                    name="site"
+                    label={t("dataEditSiteLabel")}
+                    initialValue={currentEditItem.site}
+                >
+                    <Input placeholder="" onChange={(e)=>{onChangeHandler("site", e.target.value)}}/>
+                </Form.Item>
+                <Form.Item
+                    name="remark"
+                    label={t("dataEditRemarkLabel")}
+                    initialValue={currentEditItem.remark}
+                >
+                    <TextArea autoSize={{ minRows: 3,maxRows:6}} placeholder="" onChange={(e)=>{onChangeHandler("remark", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item>
                     <Flex  gap="small" justify="end" >

@@ -1,9 +1,8 @@
 import {DeleteOutlined, EditOutlined, InfoOutlined} from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import DirectoryInfoModal from "./DirectoryInfoModal.jsx";
 import DirectoryEditModal from "./DirectoryEditModal.js";
-import {useContext} from "react";
 import {PassDtoContext} from "../Core.js";
 import {storagedata} from "../../wailsjs/go/models.js";
 import {Col, message, Modal} from "antd";
@@ -24,7 +23,6 @@ function DirectoryListRender({tabChangeBy}) {
     function oneInfoIconClickHandler(id) {
         oneIconClickedFlag = true;
         if (oneIconClickedFlag){
-            alert("You clicked on oneInfoIconClickHandler "+ id)
             setInfoModalOpen(true)
             setModalDisplayData({
                 title: "Info",
@@ -75,8 +73,9 @@ function DirectoryListRender({tabChangeBy}) {
                 cancelText: t("categoryInsetCancelButtonText"),
                 okText: t("categoryInsetOkButtonText"),
                 onOk:() => {
-                    let newCs = PassDtoReceived.loadedItems.category.filter((item) => item.id !== id)
-                    PassDtoReceived.loadedItems.category = newCs
+                    PassDtoReceived.loadedItems.category = PassDtoReceived.loadedItems.category.filter((item) => item.id !== id)
+                    // 继续移除归类夹所属密码项
+                    PassDtoReceived.loadedItems.data = PassDtoReceived.loadedItems.data.filter((item) => item.category_id !== id)
                     // 拷贝副本重新渲染
                     setPassDtoReceived({...PassDtoReceived})
                     // 传递给Go存储
@@ -93,7 +92,6 @@ function DirectoryListRender({tabChangeBy}) {
             oneIconClickedFlag = false;
             return
         }
-        alert("You clicked on oneDirectoryClickHandler")
         // 调用父组件传来的方法 将tabs key激活为"3" 显示密码项界面
         // 并且传递当前点击的归类夹id
         tabChangeBy("3", id)

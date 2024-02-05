@@ -5,6 +5,7 @@ import {PassDtoContext} from "../Core.js";
 import { useTranslation } from 'react-i18next';
 import {genAscRankId} from "../utils";
 import {DtoJsonFirst, LoadedItemsUpdate} from "../../wailsjs/go/main/App";
+import TextArea from 'antd/es/input/TextArea';
 let tmpCurrentInsertItem:storagedata.Data= {
     name: '',
     account_name: '',
@@ -16,25 +17,28 @@ let tmpCurrentInsertItem:storagedata.Data= {
 }
 const ItemInsertModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
-    const [currentInsertItem,setCurrentInsertItem] = useState<storagedata.Data>(null)
     const {t} = useTranslation()
 
     // 当input文本更新时，实时更新当前操作的密码项数据
     const onChangeHandler = (targetKey, value) => {
         tmpCurrentInsertItem[targetKey]=value
-        // 用临时全局变量更新当前操作的密码项数据
-        setCurrentInsertItem(tmpCurrentInsertItem)
     }
-
     const onFinish = () => {
+        // 判断是否已有此密码项名称
+        let ds:any = PassDtoReceived.loadedItems.data;
+        let exited = ds.some(item => item.name === tmpCurrentInsertItem.name.trim()&&item.category_id==modalDisplayData.cid)
+        if (exited){
+            message.warning(t('dataExitedTips'))
+            return
+        }
         // 生成id
         const gid = genAscRankId();
         const c = {
-            name: currentInsertItem.name,
-            account_name:  currentInsertItem.account_name,
-            password:  currentInsertItem.password,
-            site:  currentInsertItem.site,
-            remark:  currentInsertItem.remark,
+            name: tmpCurrentInsertItem.name,
+            account_name:  tmpCurrentInsertItem.account_name,
+            password:  tmpCurrentInsertItem.password,
+            site:  tmpCurrentInsertItem.site,
+            remark:  tmpCurrentInsertItem.remark,
             id:  gid,
             category_id: modalDisplayData.cid,
         };
@@ -53,10 +57,10 @@ const ItemInsertModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
     const onFinishFailed = () => {
     };
     const handleOk = () => {
-        setIsModalOpen(false);
+        handleCancel();
     };
     const handleCancel = () => {
-        // 取消别忘了重置 因为是全局变量 避免下次编辑时仍是之前的值贮存
+        // 取消别忘了重置 因为是全局变量 避免下次新增时仍是之前的值贮存
         tmpCurrentInsertItem= {
             name: '',
             account_name: '',
@@ -117,7 +121,7 @@ const ItemInsertModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
                     name="remark"
                     label={t("dataEditRemarkLabel")}
                 >
-                    <Input placeholder="" onChange={(e)=>{onChangeHandler("remark", e.target.value)}}/>
+                    <TextArea autoSize={{ minRows: 3,maxRows:6}} onChange={(e)=>{onChangeHandler("remark", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item>
                     <Flex  gap="small" justify="end" >
