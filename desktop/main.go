@@ -36,7 +36,7 @@ func initFirst() {
 			passDto.Preferences.LockPwd = aes
 		}
 	}
-	passDto.Preferences.LockPwd = "1233"
+	//passDto.Preferences.LockPwd = "1233"
 
 }
 

@@ -25,9 +25,7 @@ function DirectoryListRender({tabChangeBy}) {
         if (oneIconClickedFlag){
             setInfoModalOpen(true)
             setModalDisplayData({
-                title: "Info",
-                okText: "确定",
-                content: "This is the info modal"
+                id: id,
             })
         }
     }

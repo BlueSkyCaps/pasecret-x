@@ -1,7 +1,7 @@
 import {Button, Flex, Form, Input, message, Modal} from 'antd';
 import {storagedata} from "../../wailsjs/go/models.js";
 import {useContext, useState} from "react";
-import {PassDtoContext} from "../Core.js";
+import {PassDtoContext} from "../Core";
 import { useTranslation } from 'react-i18next';
 import {genAscRankId} from "../utils";
 import {DtoJsonFirst, LoadedItemsUpdate} from "../../wailsjs/go/main/App";

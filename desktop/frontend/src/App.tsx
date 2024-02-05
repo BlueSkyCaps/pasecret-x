@@ -13,11 +13,15 @@ import TabsDirectoryItems from "./TabsDirectoryItems.jsx";
 import {useTranslation} from "react-i18next";
 import {PassDtoContext} from "./Core";
 import DirectoryInsertModal from "./directory/DirectoryInsertModal.js"
+import SearchItemsModal from "./SearchItemsModal.jsx"
 import { storagedata } from '../wailsjs/go/models';
+import {isNullOrWhitespace} from "./utils";
 
 function App() {
     const [insertModalOpen, setInsertModalOpen] = useState(false);
-    const [modalDisplayData, setModalDisplayData] = useState({});
+    const [searchModalOpen, setSearchModalOpen] = useState(false);
+    const [modalDisplayData, setModalDisplayData] = useState(null);
+    const [searchValue, setSearchValue] = useState("");
     const [currentCategoryClickedId, setCurrentCategoryClickedId] = useState(null);
     const { t } = useTranslation();
     /* tabsInit Tabs标签组件用于初始化此组件界面，更改activeKey来动态切换当前显示的Tab标签
@@ -52,13 +56,20 @@ function App() {
     }
     const [activeKey, setActiveKey] = useState('1');
     const [homeBtnShow, setHomeBtnShow] = useState(false);
-    function onSearch() {
 
+    // 搜索按钮被点击 显示搜索模态
+    function onSearchClicked() {
+        if (isNullOrWhitespace(searchValue))
+            return
+        setModalDisplayData(searchValue)
+        setSearchModalOpen(true)
     }
+
     // 点击添加归类夹按钮，显示模态
     function addDirect(){
         setInsertModalOpen(true)
     }
+
     function tabChange(key) {
         setActiveKey(key)
         if (key === "2"){
@@ -79,8 +90,10 @@ function App() {
 
     return (
         <div>
+            {/*搜索结果模态框，点击搜索按钮显示*/}
+            {searchModalOpen? <SearchItemsModal isModalOpen={searchModalOpen} setIsModalOpen={setSearchModalOpen} modalDisplayData={modalDisplayData}/>:null}
             {/*添加归类夹模态框，点击时显示*/}
-            {insertModalOpen? <DirectoryInsertModal isModalOpen={insertModalOpen} setIsModalOpen={setInsertModalOpen} modalDisplayData={modalDisplayData}/>:null}
+            {insertModalOpen? <DirectoryInsertModal isModalOpen={insertModalOpen} setIsModalOpen={setInsertModalOpen}/>:null}
             {/*打开归类夹界面或者设置界面的按钮*/}
             {homeBtnShow?
                 <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 24,top:3 }}
@@ -106,23 +119,26 @@ function App() {
                         <FloatButton onClick={addDirect} size="small" style={{ right: 70,top:3 }}
                                      type="default" shape="circle" icon={<FolderAddOutlined />}  />
                         <Search
-                            placeholder="搜索密码项"
-                            allowClear
-                            onSearch={onSearch}
+                            placeholder={t("SearchInputText")}
+                            onSearch={onSearchClicked}
+                            onChange={(e)=>{setSearchValue(e.target.value)}}
                             style={{
                                 width: 200,
                             }}
                         />
                     </div>
                 </Header>
-                <Content >
-                    <Tabs
-                        activeKey={activeKey}
-                        size="small"
-                        type="line"
-                        tabPosition="bottom"
-                        items={tabsInit()}
-                    />
+
+                <Content>
+                    <div style={{overflowX:"hidden", overflowY:"hidden"}}>
+                        <Tabs
+                            activeKey={activeKey}
+                            size="small"
+                            type="line"
+                            tabPosition="bottom"
+                            items={tabsInit()}
+                        />
+                    </div>
                 </Content>
             </Layout>
         </div>

@@ -6,7 +6,7 @@ import {PassDtoContext} from "../Core.js";
 import { useTranslation } from 'react-i18next';
 import {genAscRankId} from "../utils";
 import {DtoJsonFirst, LoadedItemsUpdate} from "../../wailsjs/go/main/App";
-const DirectoryInsertModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
+const DirectoryInsertModal = ({isModalOpen,setIsModalOpen}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     const [name,setName] = useState("")
     const [description,setDescription] = useState("")

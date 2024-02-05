@@ -1,5 +1,4 @@
 function TabsSetting() {
-    alert("TabsSetting")
     return (
     <div>
       <h1>Setting!</h1>

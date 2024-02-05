@@ -12,7 +12,6 @@ import {LoadedItemsUpdate} from "../wailsjs/go/main/App.js";
 
 // 密碼項界面
 function TabsDirectoryItems({tabChangeBy, currentCategoryClickedId}) {
-    alert("TabsDirectoryItems")
     const { PassDtoReceived, setPassDtoReceived } = useContext(PassDtoContext)
     const {t} = useTranslation()
     const [insertModalOpen, setInsertModalOpen] = useState(false);
@@ -111,7 +110,7 @@ function TabsDirectoryItems({tabChangeBy, currentCategoryClickedId}) {
                             <Button onClick={()=>{editItemClick(item.id)}} icon={<EyeFilled />} />]
                         }>
                         <List.Item.Meta
-                            title={<a href="https://ant.design">{item.name}</a>}
+                            title={ <a onClick={()=>{editItemClick(item.id)}}>{item.name}</a> }
                             description={item.description}
                         />
                     </List.Item>
