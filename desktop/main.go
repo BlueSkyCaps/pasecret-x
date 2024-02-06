@@ -16,7 +16,7 @@ import (
 var assets embed.FS
 var passDto storagedata.PassDto
 
-func initFirst() {
+func init() {
 	var err error
 	// 获取首选项中的当前语言
 	passDto.Preferences.LocalLang = preferences.GetPreferenceByLocalLang()
@@ -29,24 +29,24 @@ func initFirst() {
 	passDto.LoadedItems = storagedata.LoadInit(resourceDJson)
 	// 获取锁屏密码
 	passDto.Preferences.LockPwd = preferences.GetPreferenceByLockPwd()
+	println("获取锁屏密码:", passDto.Preferences.LockPwd)
 	// 非空则解密
 	if !common.IsWhiteAndSpace(passDto.Preferences.LockPwd) {
 		aes, err := common.DecryptAES([]byte(common.AppProductKeyAES), passDto.Preferences.LockPwd)
-		if err != nil {
+		if err == nil {
 			passDto.Preferences.LockPwd = aes
 		}
 	}
-	//passDto.Preferences.LockPwd = "1233"
+	println("非空则解密锁屏密码:", passDto.Preferences.LockPwd)
 
 }
 
 func main() {
-	initFirst()
 	// Create an instance of the app structure
 	app := NewApp()
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "PasecretX - 密码管理",
+		Title:  "PasecretX",
 		Width:  1024,
 		Height: 768,
 		AssetServer: &assetserver.Options{

@@ -97,7 +97,7 @@ function DirectoryListRender({tabChangeBy}) {
 
     return(
         <>
-            {/*按钮模态框，点击时显示*/}
+            {/*按钮模态框，点击时显示, 别忘了要传递isModalOpen <Modal open={isModalOpen===true}/>才能显示模态*/}
             {infoModalOpen? <DirectoryInfoModal isModalOpen={infoModalOpen} setIsModalOpen={setInfoModalOpen} modalDisplayData={modalDisplayData}/>:null}
             {editModalOpen? <DirectoryEditModal isModalOpen={editModalOpen} setIsModalOpen={setEditModalOpen} modalDisplayData={modalDisplayData}/>:null}
             {

@@ -35,9 +35,6 @@ const DirectoryEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
     };
     const onFinishFailed = () => {
     };
-    const handleOk = () => {
-        handleCancel()
-    };
     const handleCancel = () => {
         preName = ""
         setIsModalOpen(false);

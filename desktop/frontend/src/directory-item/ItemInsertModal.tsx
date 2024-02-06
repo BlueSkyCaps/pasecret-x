@@ -54,11 +54,10 @@ const ItemInsertModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
         });
         handleCancel()
     };
+
     const onFinishFailed = () => {
     };
-    const handleOk = () => {
-        handleCancel();
-    };
+
     const handleCancel = () => {
         // 取消别忘了重置 因为是全局变量 避免下次新增时仍是之前的值贮存
         tmpCurrentInsertItem= {

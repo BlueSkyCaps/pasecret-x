@@ -6,7 +6,6 @@ import {useTranslation} from "react-i18next";
 import {PassDtoContext} from "./Core";
 let addClickedCounter = 0;
 let addClickedStr = "";
-// function Lock({PassDtoReceived} : { PassDtoReceived: storagedata.PassDto }) {
 function Lock() {
     const { t } = useTranslation();
     const {PassDtoReceived} = useContext(PassDtoContext);

@@ -4,6 +4,7 @@ package preferences
 import (
 	"desktop/common"
 	"encoding/json"
+	"errors"
 	"os"
 	"reflect"
 )
@@ -97,6 +98,7 @@ func SetPreference(fieldName string, v interface{}) {
 		return
 	}
 }
+
 func RemovePreference(key string) {
 	preference := readPreference()
 	preferenceR := reflect.ValueOf(preference)
@@ -119,4 +121,18 @@ func RemovePreference(key string) {
 		os.Exit(1)
 		return
 	}
+}
+
+// OverwritePreference 根据整个首选项Preferences覆盖更新
+func OverwritePreference(preferences *Preferences) error {
+	marshal, err := json.Marshal(preferences)
+	if err != nil {
+
+		return errors.New("OverwritePreference, json.Marshal:" + err.Error())
+	}
+	r, err := common.WriteExistedFile(preferencePath, marshal)
+	if !r {
+		return errors.New("OverwritePreference, WriteExistedFile:" + err.Error())
+	}
+	return nil
 }

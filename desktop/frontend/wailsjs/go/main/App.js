@@ -9,3 +9,7 @@ export function DtoJsonFirst() {
 export function LoadedItemsUpdate(arg1) {
   return window['go']['main']['App']['LoadedItemsUpdate'](arg1);
 }
+
+export function PreferencesUpdate(arg1) {
+  return window['go']['main']['App']['PreferencesUpdate'](arg1);
+}

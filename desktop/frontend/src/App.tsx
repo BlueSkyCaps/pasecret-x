@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from 'react';
 import {FloatButton, Layout, Tabs} from "antd";
 import {
-    FolderAddOutlined,
+    FolderAddOutlined, FolderOutlined,
     SettingOutlined,
     UnorderedListOutlined
 } from "@ant-design/icons";
@@ -130,8 +130,13 @@ function App() {
                 </Header>
 
                 <Content>
+                    {/*不让tab元素显示滚动条，避免显示模态框时x轴突然显示滚动条 但是其内部元素如TabsDirectories归类夹会动态显示滚动条*/}
                     <div style={{overflowX:"hidden", overflowY:"hidden"}}>
                         <Tabs
+                            // 修改tabs背景颜色为白色统一窗口配色，否则它是灰色的
+                            style={{backgroundColor:"white"}}
+                            // 不显示Bar 这样隐藏多余的bar的icon、一条横线
+                            tabBarStyle={{display:"none"}}
                             activeKey={activeKey}
                             size="small"
                             type="line"

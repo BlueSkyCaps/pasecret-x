@@ -11,6 +11,7 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen}) => {
     const [name,setName] = useState("")
     const [description,setDescription] = useState("")
     const {t} = useTranslation()
+    // 输入框验证通过执行的回调
     const onFinish = () => {
         let exited = PassDtoReceived.loadedItems.category.some((item)=>item.name===name.trim())
         if (exited){
@@ -39,9 +40,6 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen}) => {
         handleCancel()
     };
     const onFinishFailed = () => {
-    };
-    const handleOk = () => {
-        handleCancel()
     };
     const handleCancel = () => {
         setIsModalOpen(false);

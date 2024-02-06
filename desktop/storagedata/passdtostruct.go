@@ -23,10 +23,6 @@ type Data struct {
 	Id          string `json:"id"`
 	CategoryId  string `json:"category_id"`
 }
-type T struct {
-	LockPwd   string `json:"lock_pwd"`
-	LocalLang string `json:"local_lang"`
-}
 
 // PassDto is a DTO (Data Transfer Object) for the front data.
 // It contains the loadedItems当前已经解密了的存储的数据 and the language当前配置的语言.
