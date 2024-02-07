@@ -15,7 +15,7 @@ var assets embed.FS
 
 var passDto storagedata.PassDto
 
-func init() {
+func initFirst() {
 	var err error
 	// 获取默认数据文件
 	resourceDJson, err := assets.ReadFile("assets/d.json")
@@ -33,6 +33,7 @@ func init() {
 }
 
 func main() {
+	initFirst()
 	// Create an instance of the app structure
 	app := NewApp()
 	// Create application with options

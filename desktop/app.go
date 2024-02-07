@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"desktop/common"
 	"desktop/storagedata"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/jinzhu/copier"
@@ -62,4 +64,68 @@ func (a *App) LoadedItemsUpdate(data *storagedata.LoadedItems) error {
 func (a *App) Exited() {
 	fmt.Println("执行Exited")
 	os.Exit(0)
+}
+
+// ReloadOpenFileDialog 打开文件选择对话框，用户选择数据文件后还原数据，由前端调用
+func (a *App) ReloadOpenFileDialog() error {
+	fmt.Println("执行ReloadOpenFileDialog")
+	path, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+		Title:           "选择备份的数据文件来还原数据/select dumped pasecret file to reload data",
+		DefaultFilename: "pasecret-dumped.px",
+		Filters: []runtime.FileFilter{
+			{DisplayName: "Pasecret file", Pattern: "*.px"},
+		},
+	})
+	if err != nil {
+		return err
+	}
+	r, bytes, err := common.ReadFileAsBytes(path)
+	if !r {
+		return errors.New("致命错误！还原失败，请尝试重试。\n" +
+			"Fatal error! Restore failed, please close and try again." + err.Error())
+	}
+	var reloadData storagedata.LoadedItems
+	// 将读出的文件反序列化为数据文件结构体
+	err = json.Unmarshal(bytes, &reloadData)
+	if err != nil {
+		return errors.New("还原失败，不是有效的Pasecret数据文件！\n" +
+			"Restore failed, not a valid Pasecret data file!" + err.Error())
+	}
+	// 用还原的数据覆盖本机数据文件
+	r, err = common.WriteExistedFile(common.D_path, bytes)
+	if !r {
+		return errors.New("致命错误！还原失败，请尝试重试。\n" +
+			"Fatal error! Restore failed, please close and try again." + err.Error())
+	}
+	// 重新执行载入数据，如解密，相当于重新启动
+	initFirst()
+	return nil
+}
+
+// BackupSaveFileDialog 打开保存文件对话框，用户选择数据文件备份的目录，由前端调用
+func (a *App) BackupSaveFileDialog() error {
+	fmt.Println("DumpSaveFileDialog")
+	path, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+		Title:           "选择备份的数据文件来还原数据/select dumped pasecret file to reload data",
+		DefaultFilename: "pasecret-dumped.px",
+		Filters: []runtime.FileFilter{
+			{DisplayName: "Pasecret file", Pattern: "*.px"},
+		},
+	})
+	if err != nil {
+		return err
+	}
+	// 从本机读取数据文件
+	r, bytes, err := common.ReadFileAsBytes(common.D_path)
+	if !r {
+		return errors.New("致命错误！备份失败，请尝试重试。\n" +
+			"Fatal error! backup failed, please close and try again." + err.Error())
+	}
+	// 用本机数据在用户选择的路径创建备份文件
+	r, err = common.CreateFile(path, bytes)
+	if !r {
+		return errors.New("致命错误！备份失败，请尝试重试。\n" +
+			"Fatal error! backup failed, please close and try again." + err.Error())
+	}
+	return nil
 }

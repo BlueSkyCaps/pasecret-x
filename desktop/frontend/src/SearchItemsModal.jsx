@@ -17,7 +17,6 @@ const SearchItemsModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
 
     let dataSource = []
     let tmpDataSource = []
-    alert(modalDisplayData)
     let tmpValue = modalDisplayData.toLowerCase()
     // 关键字匹配过滤密码项
     tmpDataSource = PassDtoReceived.loadedItems.data.filter((d)=>
