@@ -1,7 +1,7 @@
-import {useContext, useEffect, useState} from 'react';
+import { useState} from 'react';
 import {FloatButton, Layout, Tabs} from "antd";
 import {
-    FolderAddOutlined, FolderOutlined,
+    FolderAddOutlined,
     SettingOutlined,
     UnorderedListOutlined
 } from "@ant-design/icons";
@@ -11,10 +11,8 @@ import {Content, Header} from "antd/es/layout/layout.js";
 import Search from "antd/es/input/Search.js";
 import TabsDirectoryItems from "./TabsDirectoryItems.jsx";
 import {useTranslation} from "react-i18next";
-import {PassDtoContext} from "./Core";
 import DirectoryInsertModal from "./directory/DirectoryInsertModal.js"
 import SearchItemsModal from "./SearchItemsModal.jsx"
-import { storagedata } from '../wailsjs/go/models';
 import {isNullOrWhitespace} from "./utils";
 
 function App() {
@@ -97,9 +95,9 @@ function App() {
             {/*打开归类夹界面或者设置界面的按钮*/}
             {homeBtnShow?
                 <FloatButton onClick={()=>{tabChange("1")}} size="small" style={{ right: 24,top:3 }}
-                                         type="default" shape="circle" icon={<UnorderedListOutlined />}  />:
+                             type="default" shape="circle" icon={<UnorderedListOutlined />}  />:
                 <FloatButton onClick={()=>{tabChange("2")}} size="small" style={{ right:24, top:3 }}
-                                        type="default" shape="circle" icon={<SettingOutlined/>}  />}
+                             type="default" shape="circle" icon={<SettingOutlined/>}  />}
             <Layout>
                 <Header
                     style={{
@@ -141,6 +139,7 @@ function App() {
                             size="small"
                             type="line"
                             tabPosition="bottom"
+                            // @ts-ignore
                             items={tabsInit()}
                         />
                     </div>

@@ -10,13 +10,11 @@ import (
 	"io"
 )
 
-var appDefaultKeyAES = "theKeyIsJustHereNotUsedOnProduct"
-
 // KeyBytesAES 生成密钥（256位）的字节形式
 func KeyBytesAES(k string) ([]byte, error) {
 	key := []byte(k)
 	if IsWhiteAndSpace(k) {
-		a := appDefaultKeyAES
+		a := AppStartPwdKeyAES
 		key = []byte(a)
 		return key, nil
 	}
