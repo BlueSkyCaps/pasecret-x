@@ -1,15 +1,15 @@
-import {Button, Flex, Form, Input, message, Modal, Space} from "antd";
+import {Alert, Button, Flex, Form, Input, message, Modal, Space} from "antd";
 import {useTranslation} from "react-i18next";
 import {useContext, useState} from "react";
 import {PassDtoContext} from "../Core";
 import {isNullOrWhitespace} from "../utils.js";
-import {LoadedItemsUpdate, PreferencesUpdate} from "../../wailsjs/go/main/App.js";
+import {Exited, LoadedItemsUpdate} from "../../wailsjs/go/main/App.js";
 // 定义一个匹配四个数字的正则表达式
 const regex = /^\d{4}$/;
 const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
     const {t} = useTranslation()
     const { PassDtoReceived, setPassDtoReceived } = useContext(PassDtoContext)
-    const lockPwd = PassDtoReceived.preferences.lockPwd;
+    const lockPwd = PassDtoReceived.loadedItems.preferences.lockPwd;
     const [pwdInputValues,setPwdInputValues ] = useState({
         orgPwd: "",
         one: "",
@@ -26,6 +26,12 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
         }
     ]
     const handleCancel = () => {
+        if (isNullOrWhitespace(lockPwd)){
+            // 原先没有设置启动密码，强制设置启动密码却点击了取消，则直接退出程序
+            Exited()
+            return
+        }
+        //  原先设置有启动密码，修改启动密码时点击了取消，则关闭模态
         setIsModalOpen(false);
     };
     const onFinishFailed = () => {
@@ -43,13 +49,14 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
             return
         }
         // 存储新的启动密码
-        PassDtoReceived.preferences.lockPwd =  pwdInputValues.one;
+        PassDtoReceived.loadedItems.preferences.lockPwd =  pwdInputValues.one;
         // 传递给Go更新本地
-        PreferencesUpdate(PassDtoReceived.preferences)
+        LoadedItemsUpdate(PassDtoReceived.loadedItems)
             .then(()=>{
                 // 更新数据
                 setPassDtoReceived({...PassDtoReceived})
                 message.success(t("lockPwdSetTipDoneInformation"))
+                // 重新加载界面
                 setTimeout(()=>{window.location.reload()}, 2000)
             })
             .catch((error) =>{
@@ -58,41 +65,13 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
         handleCancel();
     };
 
-    // 点击了关闭锁屏密码
-    const closePwd=()=>{
-        // 验证原密码对不对
-        if (!isNullOrWhitespace(lockPwd)){
-            if(lockPwd!== pwdInputValues.orgPwd){
-                message.error(t("lockPwdOrgNotCorrectInformation"))
-                return
-            }
-        }
-        Modal.confirm({
-            title: t("dialogShowInformationTitle"),
-            content: t("lockPwdAlreadySetShowConfirm"),
-            cancelText: t("lockPwdCancelLabel"),
-            okText: t("lockPwdOkLabel"),
-            onOk:() => {
-                // 启动密码置空
-                PassDtoReceived.preferences.lockPwd =  "";
-                // 传递给Go更新本地
-                PreferencesUpdate(PassDtoReceived.preferences)
-                    .then(()=>{
-                        // 更新数据
-                        setPassDtoReceived({...PassDtoReceived})
-                        message.success(t("lockPwdClosedShowInformation"))
-                    })
-                    .catch((error) =>{
-                        message.error(t("dialogShowErrorTitle") + error.message);
-                    })
-            }
-        });
-    }
     return (
         <>
             <Modal cancelButtonProps={{ style: { display: 'none' } }} okButtonProps={{ style: { display: 'none' } }}  centered={true} maskClosable={false} closeIcon={null}
                    width={300}
                    title={t("setLockWindowTitle")} open={isModalOpen}  onCancel={handleCancel}>
+                {/*若无启动密码则显示必须设置启动密码的提示*/}
+                {isNullOrWhitespace(lockPwd)&&<Alert message={t("lockPwdSetTipShowConfirm")} type="Warning" showIcon/>}
                 <Form
                     layout="vertical"
                     onFinish={onFinish}
@@ -105,17 +84,10 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
                         label={t("lockPwd4OrgNumLabel")}
                         rules={isNullOrWhitespace(lockPwd)?[]:rules}
                     >
-                        <Space.Compact
-                            style={{
-                                width: '100%',
-                            }}
-                        >
-                            <Input.Password onChange={(e)=>{
-                                pwdInputValues.orgPwd = e.target.value
-                                setPwdInputValues(pwdInputValues)
-                            }}/>
-                            <Button onClick={()=>{closePwd()}} type="primary" danger ghost>{t("lockPwdClose")}</Button>
-                        </Space.Compact>
+                        <Input.Password onChange={(e)=>{
+                            pwdInputValues.orgPwd = e.target.value
+                            setPwdInputValues(pwdInputValues)
+                        }}/>
                     </Form.Item>
                     <Form.Item
                         name="one"

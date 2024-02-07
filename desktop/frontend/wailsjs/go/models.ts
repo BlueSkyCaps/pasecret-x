@@ -1,24 +1,3 @@
-export namespace preferences {
-	
-	export class Preferences {
-	    lockPwd: string;
-	    localLang: string;
-	    sync_branch: number;
-	
-	    static createFrom(source: any = {}) {
-	        return new Preferences(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.lockPwd = source["lockPwd"];
-	        this.localLang = source["localLang"];
-	        this.sync_branch = source["sync_branch"];
-	    }
-	}
-
-}
-
 export namespace storagedata {
 	
 	export class Category {
@@ -67,9 +46,26 @@ export namespace storagedata {
 	        this.category_id = source["category_id"];
 	    }
 	}
+	export class Preferences {
+	    lockPwd: string;
+	    localLang: string;
+	    syncBranch: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Preferences(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.lockPwd = source["lockPwd"];
+	        this.localLang = source["localLang"];
+	        this.syncBranch = source["syncBranch"];
+	    }
+	}
 	export class LoadedItems {
 	    category: Category[];
 	    data: Data[];
+	    preferences: Preferences;
 	
 	    static createFrom(source: any = {}) {
 	        return new LoadedItems(source);
@@ -79,6 +75,7 @@ export namespace storagedata {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.category = this.convertValues(source["category"], Category);
 	        this.data = this.convertValues(source["data"], Data);
+	        this.preferences = this.convertValues(source["preferences"], Preferences);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -100,8 +97,8 @@ export namespace storagedata {
 		}
 	}
 	export class PassDto {
-	    loadedItems: LoadedItems;
-	    preferences: preferences.Preferences;
+	    loadedItems?: LoadedItems;
+	    errorMsg: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new PassDto(source);
@@ -110,7 +107,7 @@ export namespace storagedata {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.loadedItems = this.convertValues(source["loadedItems"], LoadedItems);
-	        this.preferences = this.convertValues(source["preferences"], preferences.Preferences);
+	        this.errorMsg = source["errorMsg"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

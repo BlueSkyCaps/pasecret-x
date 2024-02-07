@@ -14,7 +14,6 @@ import (
 )
 
 var D_path = filepath.Join(AppDataDir(), "d.json")
-var Preference_path = filepath.Join(AppDataDir(), "preference.json")
 
 func AppDataDir() string {
 	homeDir, err := os.UserHomeDir()

@@ -1,10 +1,9 @@
 package storagedata
 
-import "desktop/preferences"
-
 type LoadedItems struct {
-	Category []Category `json:"category"`
-	Data     []Data     `json:"data"`
+	Category    []Category  `json:"category"`
+	Data        []Data      `json:"data"`
+	Preferences Preferences `json:"preferences"`
 }
 type Category struct {
 	Name        string `json:"name"`
@@ -24,9 +23,16 @@ type Data struct {
 	CategoryId  string `json:"category_id"`
 }
 
+// Preferences 加载的首选项配置，如启动密码。
+type Preferences struct {
+	LockPwd    string `json:"lockPwd"`
+	LocalLang  string `json:"localLang"`
+	SyncBranch int    `json:"syncBranch"`
+}
+
 // PassDto is a DTO (Data Transfer Object) for the front data.
-// It contains the loadedItems当前已经解密了的存储的数据 and the language当前配置的语言.
+// It contains the loadedItems当前已经解密了的存储的数据
 type PassDto struct {
-	LoadedItems LoadedItems             `json:"loadedItems"`
-	Preferences preferences.Preferences `json:"preferences"`
+	LoadedItems *LoadedItems `json:"loadedItems"`
+	ErrorMsg    string       `json:"errorMsg"`
 }

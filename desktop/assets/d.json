@@ -42,5 +42,10 @@
     }
   ],
   "data": [
-  ]
+  ],
+  "preference": {
+    "lockPwd": "",
+    "localLang": "zh",
+    "syncBranch": 0
+  }
 }

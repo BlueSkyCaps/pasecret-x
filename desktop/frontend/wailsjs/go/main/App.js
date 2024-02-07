@@ -6,10 +6,10 @@ export function DtoJsonFirst() {
   return window['go']['main']['App']['DtoJsonFirst']();
 }
 
-export function LoadedItemsUpdate(arg1) {
-  return window['go']['main']['App']['LoadedItemsUpdate'](arg1);
+export function Exited() {
+  return window['go']['main']['App']['Exited']();
 }
 
-export function PreferencesUpdate(arg1) {
-  return window['go']['main']['App']['PreferencesUpdate'](arg1);
+export function LoadedItemsUpdate(arg1) {
+  return window['go']['main']['App']['LoadedItemsUpdate'](arg1);
 }

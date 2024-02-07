@@ -11,10 +11,10 @@ function Lock() {
     const {PassDtoReceived} = useContext(PassDtoContext);
     function numberBtnInputHandler(number) {
         addClickedCounter++
-        setPercent(addClickedCounter*25)
+        setPercent(addClickedCounter*16.7)
         addClickedStr+=number;
-        if (addClickedCounter>=4){
-            if (addClickedStr===PassDtoReceived.preferences.lockPwd){
+        if (addClickedCounter>=6){
+            if (addClickedStr===PassDtoReceived.loadedItems.preferences.lockPwd){
                 setPass(true)
                 return
                 // end ignore all logic
@@ -23,17 +23,17 @@ function Lock() {
             }
             addClickedCounter=0
             addClickedStr="";
-            setPercent(addClickedCounter*25)
+            setPercent(addClickedCounter*16.7)
         }
     }
-    const [percent, setPercent] = useState(0);
+    const [percent, setPercent] = useState(0.0);
     const [pass, setPass] = useState(false);
     return (
             pass ? <App/>:
             <div>
                 <h4 style={{color:"gray"}}>{t("lockLabelText")}</h4>
                 <Space>
-                    <Progress strokeColor="#7ac5cd" showInfo={false} steps={4} percent={percent} size={25} />
+                    <Progress strokeColor="#7ac5cd" showInfo={false} steps={6} percent={percent} size={40} />
                 </Space>
                 <Row  className="numberPadding">
                     <Col span={24}>

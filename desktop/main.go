@@ -1,14 +1,12 @@
 package main
 
 import (
-	"desktop/common"
-	"desktop/preferences"
 	"desktop/storagedata"
 	"embed"
+	"fmt"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-	"os"
 )
 
 //go:embed all:frontend/dist
@@ -16,33 +14,23 @@ import (
 var assets embed.FS
 var passDto storagedata.PassDto
 
-func initFirst() {
+func init() {
 	var err error
-	// 获取首选项中的当前语言
-	passDto.Preferences.LocalLang = preferences.GetPreferenceByLocalLang()
+	// 获取默认数据文件
 	resourceDJson, err := assets.ReadFile("assets/d.json")
 	if err != nil {
-		println("Failed to read d.json resource in init:", err.Error())
-		os.Exit(1)
+		// 发生异常，贮存错误信息后续让前端首先判断显示
+		passDto.ErrorMsg = "Failed to read d.json resource in init: " + err.Error()
+		fmt.Println(passDto.ErrorMsg)
 		return
 	}
-	passDto.LoadedItems = storagedata.LoadInit(resourceDJson)
-	// 获取锁屏密码
-	passDto.Preferences.LockPwd = preferences.GetPreferenceByLockPwd()
-	println("获取锁屏密码:", passDto.Preferences.LockPwd)
-	// 非空则解密
-	if !common.IsWhiteAndSpace(passDto.Preferences.LockPwd) {
-		aes, err := common.DecryptAES([]byte(common.AppProductKeyAES), passDto.Preferences.LockPwd)
-		if err == nil {
-			passDto.Preferences.LockPwd = aes
-		}
+	passDto.LoadedItems, err = storagedata.LoadInit(resourceDJson, passDto)
+	if err != nil {
+		return
 	}
-	println("非空则解密锁屏密码:", passDto.Preferences.LockPwd)
-
 }
 
 func main() {
-	initFirst()
 	// Create an instance of the app structure
 	app := NewApp()
 	// Create application with options
