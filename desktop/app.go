@@ -66,11 +66,8 @@ func (a *App) PreferencesUpdate(preference *preferences.Preferences) error {
 	purePwd := preference.LockPwd
 	if preference.LockPwd != "" {
 		var err error
-		println("密码：", preference.LockPwd)
 		// 加密启动密码
 		preference.LockPwd, err = common.EncryptAES([]byte(common.AppProductKeyAES), preference.LockPwd)
-		println("加密码：", preference.LockPwd)
-
 		if err != nil {
 			return err
 		}

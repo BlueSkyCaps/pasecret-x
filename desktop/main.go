@@ -16,7 +16,7 @@ import (
 var assets embed.FS
 var passDto storagedata.PassDto
 
-func init() {
+func initFirst() {
 	var err error
 	// 获取首选项中的当前语言
 	passDto.Preferences.LocalLang = preferences.GetPreferenceByLocalLang()
@@ -42,6 +42,7 @@ func init() {
 }
 
 func main() {
+	initFirst()
 	// Create an instance of the app structure
 	app := NewApp()
 	// Create application with options
