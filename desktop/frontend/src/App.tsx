@@ -16,6 +16,8 @@ import SearchItemsModal from "./SearchItemsModal.jsx"
 import {isNullOrWhitespace} from "./utils";
 
 function App() {
+    const [activeKey, setActiveKey] = useState('1');
+    const [homeBtnShow, setHomeBtnShow] = useState(false);
     const [insertModalOpen, setInsertModalOpen] = useState(false);
     const [searchModalOpen, setSearchModalOpen] = useState(false);
     const [modalDisplayData, setModalDisplayData] = useState(null);
@@ -27,6 +29,7 @@ function App() {
     而不是一次性返回整个Tabs标签组件数组[]！因为这样会出现更新activeKey会导致ant迭代渲染数组中的所有标签组件的问题!
     即使当前显示的标签组件是正确的
     */
+
     function tabsInit(){
         switch (activeKey) {
             case  "1":
@@ -52,8 +55,7 @@ function App() {
                 ]
         }
     }
-    const [activeKey, setActiveKey] = useState('1');
-    const [homeBtnShow, setHomeBtnShow] = useState(false);
+
 
     // 搜索按钮被点击 显示搜索模态
     function onSearchClicked() {

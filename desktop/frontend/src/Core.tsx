@@ -39,6 +39,8 @@ export const PassDtoContext = createContext(null);
      //             -> 后续只要设置界面点击语言按钮 修改xx.localLang的值setPassDtoReceived后监听到改变都会执行，切换设置的值
      // 不监听整个PassDtoReceived，因为只是设置语言字段localLang的改变，避免更新归类、密码项时该effect被执行
      useEffect(()=>{
+         // changeLanguage会使组件重新渲染 i18n内部处理过引用。而设置组件setPassDtoReceived会导致设置组件重新渲染，
+         // 因此设置组件会被执行渲染两次，第一次是setPassDtoReceived导致，第二次是此处的effect-changeLanguage导致。
          i18n.changeLanguage(PassDtoReceived?.loadedItems.preferences.localLang)
      },[PassDtoReceived?.loadedItems.preferences.localLang])
 

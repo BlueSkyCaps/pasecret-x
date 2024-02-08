@@ -21,7 +21,6 @@ const TabsSetting = () => {
     const [settingLockModalOpen, setSettingLockModalOpen] = useState(false);
     const [modalDisplayData, setModalDisplayData] = useState({});
     let [ing, setIng] =  useState(false);
-
     const treeData = [
         {
             title: t("treeSettingDictParent-StartPwd"),
@@ -118,10 +117,10 @@ const TabsSetting = () => {
     function changeLanguageHandler() {
         if (PassDtoReceived.loadedItems.preferences.localLang==="zh"){
             PassDtoReceived.loadedItems.preferences.localLang="en"
-            message.info('changed to English')
+            message.info('changed to English wow!')
         }else {
             PassDtoReceived.loadedItems.preferences.localLang="zh"
-            message.info('中文牛掰666')
+            message.info('中文牛掰 666')
         }
         LoadedItemsUpdate(PassDtoReceived.loadedItems)
         // 更新渲染，此时Core组件中的useEffect监听到PassDtoReceived.xx.localLang改变，执行useEffect切换语言
