@@ -17,7 +17,7 @@ func GetPreferenceByLocalLang() string {
 }
 
 func readPreference() *Preferences {
-	r, bs, err := common.ReadFileAsBytes(common.D_path)
+	r, bs, err := common.ReadFileAsBytes(common.DPath)
 	if !r {
 		println("err", "readPreference,ReadFileAsBytes:"+err.Error())
 		os.Exit(1)

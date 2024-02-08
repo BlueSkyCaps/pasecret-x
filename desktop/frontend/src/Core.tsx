@@ -13,9 +13,6 @@ export const PassDtoContext = createContext(null);
  function Core() {
      // 获取 i18n hook
      const { t, i18n } = useTranslation();
-     useEffect(() =>{
-         i18n.changeLanguage("zh")
-     },[])
 
      // 是否正在获取锁屏密码的状态
     const [isGetLockPwdING, setIsGetLockPwd] = useState(true);
@@ -35,6 +32,16 @@ export const PassDtoContext = createContext(null);
              }
          });
      },[])
+
+     // 切换语言，该effect执行条件：
+     //             -> 会在首次运行加载完第一次执行，此时PassDtoReceived?为空，因为还没获取到后端数据
+     //             -> DtoJsonFirst()设置PassDtoReceived后监听到改变再次执行，此时真正设置了语言
+     //             -> 后续只要设置界面点击语言按钮 修改xx.localLang的值setPassDtoReceived后监听到改变都会执行，切换设置的值
+     // 不监听整个PassDtoReceived，因为只是设置语言字段localLang的改变，避免更新归类、密码项时该effect被执行
+     useEffect(()=>{
+         i18n.changeLanguage(PassDtoReceived?.loadedItems.preferences.localLang)
+     },[PassDtoReceived?.loadedItems.preferences.localLang])
+
      return (
              isGetLockPwdING ? <></> :
              isNullOrWhitespace(PassDtoReceived.loadedItems.preferences.lockPwd) ?

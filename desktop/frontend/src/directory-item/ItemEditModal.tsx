@@ -16,7 +16,7 @@ let preName = ""
 
 const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
-    const [currentEditItem] = useState<storagedata.Data>(modalDisplayData)
+    const [currentEditInitItem] = useState<storagedata.Data>(modalDisplayData)
     preName = modalDisplayData.name
     tmpEditItem = modalDisplayData
     const {t} = useTranslation()
@@ -87,7 +87,7 @@ const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
                 <Form.Item
                     name="name"
                     label={t("dataEditNameLabel")}
-                    initialValue={currentEditItem.name}
+                    initialValue={currentEditInitItem.name}
                     rules={[
                         {
                             required: true,
@@ -105,28 +105,28 @@ const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
                 <Form.Item
                     name="account_name"
                     label={t("dataEditDynamicByUsualAccountNameLabel")}
-                    initialValue={currentEditItem.account_name}
+                    initialValue={currentEditInitItem.account_name}
                 >
                     <Input placeholder="" onChange={(e)=>{onChangeHandler("account_name", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item
                     name="password"
                     label={t("dataEditPwdLabel")}
-                    initialValue={currentEditItem.password}
+                    initialValue={currentEditInitItem.password}
                 >
                     <Input placeholder="" onChange={(e)=>{onChangeHandler("password", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item
                     name="site"
                     label={t("dataEditSiteLabel")}
-                    initialValue={currentEditItem.site}
+                    initialValue={currentEditInitItem.site}
                 >
                     <Input placeholder="" onChange={(e)=>{onChangeHandler("site", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item
                     name="remark"
                     label={t("dataEditRemarkLabel")}
-                    initialValue={currentEditItem.remark}
+                    initialValue={currentEditInitItem.remark}
                 >
                     <TextArea autoSize={{ minRows: 3,maxRows:6}} placeholder="" onChange={(e)=>{onChangeHandler("remark", e.target.value)}}/>
                 </Form.Item>

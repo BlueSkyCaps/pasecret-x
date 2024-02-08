@@ -27,7 +27,7 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	// 设置最小窗口大小
-	runtime.WindowSetMinSize(ctx, 1000, 700)
+	runtime.WindowSetMinSize(a.ctx, 1000, 700)
 }
 
 // DtoJsonFirst 获取第一次启动时存储的json数据，由前端调用
@@ -98,7 +98,7 @@ func (a *App) ReloadOpenFileDialog() error {
 			"Restore failed, not a valid Pasecret data file!" + err.Error())
 	}
 	// 用还原的数据覆盖本机数据文件
-	r, err = common.WriteExistedFile(common.D_path, bytes)
+	r, err = common.WriteExistedFile(common.DPath, bytes)
 	if !r {
 		return errors.New("致命错误！还原失败，请尝试重试。\n" +
 			"Fatal error! Restore failed, please close and try again." + err.Error())
@@ -126,7 +126,7 @@ func (a *App) BackupSaveFileDialog() error {
 		return errors.New("_")
 	}
 	// 从本机读取数据文件
-	r, bytes, err := common.ReadFileAsBytes(common.D_path)
+	r, bytes, err := common.ReadFileAsBytes(common.DPath)
 	if !r {
 		return errors.New("致命错误！备份失败，请尝试重试。\n" +
 			"Fatal error! backup failed, please close and try again." + err.Error())
@@ -138,4 +138,9 @@ func (a *App) BackupSaveFileDialog() error {
 			"Fatal error! backup failed, please close and try again." + err.Error())
 	}
 	return nil
+}
+
+// OpenBrowserUri 打开浏览器并访问指定链接，由前端调用
+func (a *App) OpenBrowserUri(uri string) {
+	runtime.BrowserOpenURL(a.ctx, uri)
 }

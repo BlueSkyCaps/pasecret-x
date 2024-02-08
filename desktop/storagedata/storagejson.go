@@ -22,7 +22,7 @@ func LoadInit(data []byte, dto PassDto) (*LoadedItems, error) {
 			return nil, errors.New(dto.ErrorMsg)
 		}
 	}
-	StoDPath = common.D_path
+	StoDPath = common.DPath
 	// 用户本机不存在默认数据文件，则创建
 	if !common.Existed(StoDPath) {
 		r, err := common.CreateFile(StoDPath, data)

@@ -42,7 +42,7 @@ const SearchItemsModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
             title: t("SearchDataResultHeaderVDataCategoryName"),
             dataIndex: '_category_name',
             key: '_category_name',
-            width: 120,
+            width: 140,
             ellipsis: true,
             // 数据单元格的渲染函数，参数分别为当前行的值，当前行数据，行索引
             render: (title, item) => (

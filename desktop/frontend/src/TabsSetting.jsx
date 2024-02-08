@@ -6,14 +6,18 @@ import {
     RollbackOutlined, ShareAltOutlined, SmileFilled,
     TranslationOutlined,
 } from '@ant-design/icons';
-import {message, Modal, Spin, Tree} from 'antd';
+import {Button, message, Modal, notification, Space, Spin, Tree} from 'antd';
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import SettingLockModal from "./setting/SettingLockModal.jsx";
-import {BackupSaveFileDialog, LoadedItemsUpdate, ReloadOpenFileDialog} from "../wailsjs/go/main/App.js";
-import {isNullOrEmpty, isNullOrWhitespace} from "./utils.js";
+import {BackupSaveFileDialog, LoadedItemsUpdate, OpenBrowserUri, ReloadOpenFileDialog} from "../wailsjs/go/main/App.js";
+import {appLinkUri, blogUri, githubUri} from "./common.js";
+import {useContext} from "react";
+import {PassDtoContext} from "./Core";
+import {changeLanguage} from "i18next";
 const TabsSetting = () => {
     const { t, i18n } = useTranslation();
+    const { PassDtoReceived, setPassDtoReceived } = useContext(PassDtoContext)
     const [settingLockModalOpen, setSettingLockModalOpen] = useState(false);
     const [modalDisplayData, setModalDisplayData] = useState({});
     let [ing, setIng] =  useState(false);
@@ -24,9 +28,6 @@ const TabsSetting = () => {
             key: '0',
             icon: <LockFilled />,
             style: { marginBottom: 20},
-            onSelect: () => {
-                alert()
-            }
         },
         {
             title: t("treeSettingDictParent-DumpRestore"),
@@ -80,17 +81,52 @@ const TabsSetting = () => {
                 ReloadHandler()
                 break
             case '2':
-                message.info('Language/语言')
+                changeLanguageHandler()
                 break
             case '3':
                 message.info('捐助赞赏')
                 break
             case '4':
-                message.info('关于')
+                showAboutNotification()
                 break
         }
     }
+    function showAboutNotification() {
+        // 显示关于的通知
+        notification.open({
+            message: t("aboutWindowTitle"),
+            description: t("aboutStatementLabelText"),
+            placement:"top",
+            duration:null,
+            // 调用Go的打开浏览器方法
+            btn:(
+                <Space>
+                    <Button type="link" size="small" onClick={() => OpenBrowserUri(appLinkUri)}>
+                        {t("aboutAppSiteLinkName")}
+                    </Button>
+                    <Button type="link" size="small" onClick={() =>OpenBrowserUri(blogUri)}>
+                        {t("aboutMySiteLinkName")}
+                    </Button>
+                    <Button type="link" size="small" onClick={() => OpenBrowserUri(githubUri)}>
+                        Github
+                    </Button>
+                </Space>
+            )
+        });
+    }
 
+    function changeLanguageHandler() {
+        if (PassDtoReceived.loadedItems.preferences.localLang==="zh"){
+            PassDtoReceived.loadedItems.preferences.localLang="en"
+            message.info('changed to English')
+        }else {
+            PassDtoReceived.loadedItems.preferences.localLang="zh"
+            message.info('中文牛掰666')
+        }
+        LoadedItemsUpdate(PassDtoReceived.loadedItems)
+        // 更新渲染，此时Core组件中的useEffect监听到PassDtoReceived.xx.localLang改变，执行useEffect切换语言
+        setPassDtoReceived({...PassDtoReceived})
+    }
     function BackupHandler() {
         setIng(true)
         BackupSaveFileDialog().then(r => {
@@ -122,6 +158,7 @@ const TabsSetting = () => {
                         window.location.reload()
                     },2000)
                 }).catch(e => {
+                    setIng(false)
                     // e如果是"_" 則用戶取消的對話框，不是"_"就是Go报错
                     if (e !== "_"){
                         setIng(false)
@@ -135,8 +172,8 @@ const TabsSetting = () => {
 
     return (
         <>
+            {ing && <div><Spin tip={t("spinningTips")} size="large"><div className="content" /></Spin></div>}
             {settingLockModalOpen && <SettingLockModal isModalOpen={settingLockModalOpen} setIsModalOpen={setSettingLockModalOpen}/>}
-            {ing && <Spin tip={t("spinningTips")} size="large"><div className="content" /></Spin>}
             <Tree
                 style={{ fontSize: 18}}
                 showIcon

@@ -18,6 +18,10 @@ export function LoadedItemsUpdate(arg1) {
   return window['go']['main']['App']['LoadedItemsUpdate'](arg1);
 }
 
+export function OpenBrowserUri(arg1) {
+  return window['go']['main']['App']['OpenBrowserUri'](arg1);
+}
+
 export function ReloadOpenFileDialog() {
   return window['go']['main']['App']['ReloadOpenFileDialog']();
 }

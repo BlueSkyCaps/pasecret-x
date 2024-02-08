@@ -25,11 +25,9 @@ const resources = {
             "directoryInfoOkText": "OK",
             "directoryInfoItemsCount": "There are {{count}} items stored under this category.",
             "aboutWindowTitle": "About",
-            "aboutStatementLabelText": "The software is written by BlueSkyCaps.\nThis software does not transmit any data. This software encrypts and stores your saved data,\nbut it does not mean that it can protect your data 100%.\nIf you lose data or leak your account password in the process of using this software,\nthis software and the author are not responsible for any losses.\nLosses are caused by yourself or otherwise.\nBy using the Software, you agree to this.",
-            "aboutIntroduceLabelText": "Pasecret is an account password manager that can run on multiple platforms.\nFor example, you can use it on your phone and sync your data to your computer.\nThe data adopts an encryption algorithm and can be used without remote transmission.\nDonations are welcome, and the author expresses his gratitude.\n",
+            "aboutStatementLabelText": "PasecretX is an account and password manager that works on multiple platforms. You can use it on your phone and sync your data to your computer. The data is encrypted and can be used off the network without transmitting any of your native data to the remote device. Author: BlueSkyCaps. Donations are welcome and the authors are grateful. This program encrypts and stores your saved data, but it does not mean that your data is 100% safe. If you use this program to cause data loss or account password leakage, this program and the author are not responsible. By using the Program, you agree to this content.",
             "aboutAppSiteLinkName": "Home page",
             "aboutMySiteLinkName": "Author blog",
-            "aboutStatementButtonText": "Disclaimers, etc",
             "donateWindowTitle": "Donate",
             "donateOpenShowConfirm": "Donations appreciate the need\nfor internet connectivity Get\nappreciation QR codes, list of\nappreciators.This app will not\npass any other data.\nDo you want to continue?",
             "dumpDoneShowInformation": "The data has been backed up to the path \nof your choice that you can use for restore.",
@@ -131,11 +129,9 @@ const resources = {
             "directoryInfoOkText": "好的",
             "directoryInfoItemsCount": "该归类夹下存储了{{count}}个数据项。",
             "aboutWindowTitle": "关于",
-            "aboutStatementLabelText": "本软件作者：BlueSkyCaps。本软件不传输任何数据，只有在“捐助赞赏”中需要联网加载付款二维码，\n并且事先有提示是否打开。本软件加密存储您保存的数据，但不代表百分百能够保障您的数据安全。\n如您在使用此软件过程中产生数据丢失、账户密码泄露造成的损失，本软件和作者不负任何责任，\n损失由您自己或其他方面造成且承担。\n使用本软件代表您同意此内容。",
-            "aboutIntroduceLabelText": "Pasecret是一款能在多个平台运行的账号密码管理软件。\n例如，您可以在手机上使用，并且同步数据到电脑端。\n数据采用加密算法，并且可以断网使用，不会进行远程传输。\n欢迎进行捐助赞赏，作者表示感激。\n",
+            "aboutStatementLabelText": "PasecretX是一款能在多个平台运行的账号密码管理软件。您可以在手机上使用，并且同步数据到电脑端。数据采用加密算法，并且可以断网使用，不会传输您的任何本机数据到远程。作者：BlueSkyCaps。欢迎进行捐助赞赏，作者表示感激。本程序加密存储您保存的数据但不代表百分百能够保障您的数据安全。如您在使用此程序过程中产生数据丢失、账户密码泄露，本程序和作者不负任何责任，使用本程序代表您同意此内容。",
             "aboutAppSiteLinkName": "软件主页",
             "aboutMySiteLinkName": "作者博客",
-            "aboutStatementButtonText": "免责声明等",
             "donateWindowTitle": "捐助赞赏",
             "donateOpenShowConfirm": "捐助赞赏需要进行网络连接\n获取赞赏二维码、赞赏者列表。\n本应用不会传递任何其他数据，\n是否继续？",
             "dumpDoneShowInformation": "已备份数据到选择的目录中，可将其用于还原。",
@@ -216,8 +212,7 @@ const resources = {
     }
 };
 
-i18n
-    .use(initReactI18next) // passes i18n down to react-i18next
+i18n.use(initReactI18next) // passes i18n down to react-i18next
     .init({
         resources,
         interpolation: {

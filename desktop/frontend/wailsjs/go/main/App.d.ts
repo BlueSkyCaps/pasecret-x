@@ -10,4 +10,6 @@ export function Exited():Promise<void>;
 
 export function LoadedItemsUpdate(arg1:storagedata.LoadedItems):Promise<void>;
 
+export function OpenBrowserUri(arg1:string):Promise<void>;
+
 export function ReloadOpenFileDialog():Promise<void>;

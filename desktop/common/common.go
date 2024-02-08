@@ -6,15 +6,11 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"regexp"
 	"runtime"
-	"strconv"
 	"strings"
-	"time"
 )
 
-var D_path = filepath.Join(AppDataDir(), "d.json")
-var Preference_path = filepath.Join(AppDataDir(), "preference.json")
+var DPath = filepath.Join(AppDataDir(), "d.json")
 
 func AppDataDir() string {
 	homeDir, err := os.UserHomeDir()
@@ -105,34 +101,4 @@ func ReadFileAsBytes(path string) (bool, []byte, error) {
 
 func IsWhiteAndSpace(s string) bool {
 	return strings.TrimSpace(s) == ""
-}
-
-// GenAscRankId 根据当前日期生成一个整型数字，用于归类夹升序排序。每次生成的值都比之前生成的要大，最小值基于秒
-func GenAscRankId() (bool, int) {
-	now := time.Now()
-	//调用结构体中的方法：
-	rankS := fmt.Sprintf("%v%v%v%v%v%v", now.Year(), int(now.Month()), now.Day(), now.Hour(), now.Minute(), now.Second())
-	rank, err := strconv.Atoi(rankS)
-	if err != nil {
-		return false, 0
-	}
-	return true, rank
-}
-
-var ShowSearchResultCeilWH_ = "xxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxxxxxxx"
-var DonateAliPayUri_ = "http://sto.reminisce.top/OTHER/donate/alipay.jpg"
-var DonateWechatUri_ = "http://sto.reminisce.top/OTHER/donate/wechat.jpg"
-var AppLinkUri_ = "https://apps.reminisce.top/home/pasecret.html"
-var GithubUri = "https://github.com/BlueSkyCaps/pasecret"
-var BlogUri = "https://www.reminisce.top/"
-
-func MatchPwdFormat(str string) bool {
-	// 定义一个表示4个数字的正则表达式
-	re, _ := regexp.Compile(`^\d{4}$`)
-
-	// 使用正则表达式进行匹配
-	if re.MatchString(str) {
-		return true
-	}
-	return false
 }
