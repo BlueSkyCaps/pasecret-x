@@ -35,19 +35,26 @@ const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
                 return
             }
         }
-        // 找到当前编辑的密码项进行更新
-        let editItem = ds.find(item => item.id === modalDisplayData.id);
-        editItem.name= tmpEditItem.name.trim();
-        editItem.account_name = tmpEditItem.account_name;
-        editItem.password = tmpEditItem.password;
-        editItem.site = tmpEditItem.site;
-        editItem.remark = tmpEditItem.remark;
-        console.log("编辑密码项：：", editItem)
-        // 更新渲染
-        setPassDtoReceived(PassDtoReceived);
+        // 拷贝一个深副本
+        let newObj = JSON.parse(JSON.stringify(PassDtoReceived));
+        let newItemObj = newObj.loadedItems.data.find(item => item.id === modalDisplayData.id);
+        newItemObj.name= tmpEditItem.name.trim();
+        newItemObj.account_name = tmpEditItem.account_name;
+        newItemObj.password = tmpEditItem.password;
+        newItemObj.site = tmpEditItem.site;
+        newItemObj.remark = tmpEditItem.remark;
         // 传递给Go存储
-        LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
-            message.error(t("dialogShowErrorTitle")+error.message);
+        LoadedItemsUpdate(newObj.loadedItems)
+            .then(()=>{
+                // // 找到当前编辑的密码项进行更新 引用传递直接修改
+                // let editItem = ds.find(item => item.id === modalDisplayData.id);
+                // // editItem引用指向newItemObj，而newItemObj元素指向newObj数组引用地址
+                // editItem = {...newItemObj}
+                // 更新渲染
+                setPassDtoReceived(newObj);
+            })
+            .catch((error) =>{
+            message.error(t("dialogShowErrorTitle")+error);
         });
         handleCancel()
     };

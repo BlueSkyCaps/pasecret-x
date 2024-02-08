@@ -6,14 +6,18 @@ import {
     RollbackOutlined, ShareAltOutlined, SmileFilled,
     TranslationOutlined,
 } from '@ant-design/icons';
-import {message, Tree} from 'antd';
+import {message, Modal, Spin, Tree} from 'antd';
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import SettingLockModal from "./setting/SettingLockModal.jsx";
+import {BackupSaveFileDialog, LoadedItemsUpdate, ReloadOpenFileDialog} from "../wailsjs/go/main/App.js";
+import {isNullOrEmpty, isNullOrWhitespace} from "./utils.js";
 const TabsSetting = () => {
     const { t, i18n } = useTranslation();
     const [settingLockModalOpen, setSettingLockModalOpen] = useState(false);
     const [modalDisplayData, setModalDisplayData] = useState({});
+    let [ing, setIng] =  useState(false);
+
     const treeData = [
         {
             title: t("treeSettingDictParent-StartPwd"),
@@ -63,16 +67,17 @@ const TabsSetting = () => {
             style: { marginBottom: 20},
         },
     ];
+
     function treeNodeSelectedHandler(key) {
         switch (key) {
             case '0':
                 setSettingLockModalOpen(true)
                 break
             case '1-0':
-                message.info('备份数据')
+                BackupHandler()
                 break
             case '1-1':
-                message.info('还原数据到本机')
+                ReloadHandler()
                 break
             case '2':
                 message.info('Language/语言')
@@ -85,9 +90,53 @@ const TabsSetting = () => {
                 break
         }
     }
+
+    function BackupHandler() {
+        setIng(true)
+        BackupSaveFileDialog().then(r => {
+            setIng(false)
+            message.success(t("dumpDoneShowInformation"))
+        }).catch(e => {
+            setIng(false)
+            // e如果是"_"則用戶取消的對話框，不是"_"就是Go报错
+            if (e !== "_"){
+                console.error(e)
+                message.error(e)
+            }
+        })
+    }
+
+    function ReloadHandler() {
+        Modal.confirm({
+            title: t("dialogShowInformationTitle"),
+            content: t("restoreBeginShowConfirm"),
+            cancelText: t("restoreCancelButtonText"),
+            okText: t("restoreOkButtonText"),
+            onOk:() => {
+                setIng(true)
+                ReloadOpenFileDialog().then(r => {
+                    setIng(false)
+                    message.success(t("restoreDoneShowInformation"))
+                    setTimeout(() =>{
+                        // 还原成功重新加载
+                        window.location.reload()
+                    },2000)
+                }).catch(e => {
+                    // e如果是"_" 則用戶取消的對話框，不是"_"就是Go报错
+                    if (e !== "_"){
+                        setIng(false)
+                        console.error(e)
+                        message.error(e)
+                    }
+                })
+            }
+        });
+    }
+
     return (
         <>
             {settingLockModalOpen && <SettingLockModal isModalOpen={settingLockModalOpen} setIsModalOpen={setSettingLockModalOpen}/>}
+            {ing && <Spin tip={t("spinningTips")} size="large"><div className="content" /></Spin>}
             <Tree
                 style={{ fontSize: 18}}
                 showIcon

@@ -43,14 +43,19 @@ const ItemInsertModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
             category_id: modalDisplayData.cid,
         };
         console.log("密码项：：", c)
-        // 拷贝为副本更新，否则无法监听到改变而渲染
-        let newObj = {...PassDtoReceived};
-        newObj.loadedItems.data.push(c);
-        // 更新渲染
-        setPassDtoReceived(newObj);
+        PassDtoReceived.loadedItems.data.push(c);
         // 传递给Go存储
-        LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
-            message.error(t("dialogShowErrorTitle")+error.message);
+        LoadedItemsUpdate(PassDtoReceived.loadedItems)
+            .then(()=>{
+                // 更新渲染 push()函数直接更新能够被监听，无需副本拷贝
+                // setPassDtoReceived({...PassDtoReceived});
+            })
+            .catch((error) =>{
+                // 引发错误则撤销
+                PassDtoReceived.loadedItems.data.pop();
+                // pop需要更新才会被监听到 从而渲染组件
+                setPassDtoReceived({...PassDtoReceived});
+                message.error(t("dialogShowErrorTitle")+error);
         });
         handleCancel()
     };

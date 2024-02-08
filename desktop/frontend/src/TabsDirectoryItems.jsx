@@ -26,15 +26,20 @@ function TabsDirectoryItems({tabChangeBy, currentCategoryClickedId}) {
             cancelText: t("dataEditCancelButtonText"),
             okText: t("dataEditOkButtonText"),
             onOk:() => {
+                // 深拷貝一個临时副本
+                let newObj = JSON.parse(JSON.stringify(PassDtoReceived));
                 // 移除此密码项
-                PassDtoReceived.loadedItems.data =
-                    PassDtoReceived.loadedItems.data
+                newObj.loadedItems.data =
+                    newObj.loadedItems.data
                         .filter((item) => item.id !== id || item.category_id !== currentCategoryClickedId)
-                // 拷贝副本重新渲染
-                setPassDtoReceived({...PassDtoReceived})
                 // 传递给Go存储
-                LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
-                    message.error(t("dialogShowErrorTitle")+error.message);
+                LoadedItemsUpdate(newObj.loadedItems)
+                    .then(()=>{
+                        // 拷贝副本重新渲染
+                        setPassDtoReceived(newObj)
+                    })
+                    .catch((error) =>{
+                    message.error(t("dialogShowErrorTitle")+error);
                 });
             }
         });

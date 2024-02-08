@@ -3,9 +3,12 @@ import {useTranslation} from "react-i18next";
 import {useContext, useState} from "react";
 import {PassDtoContext} from "../Core";
 import {isNullOrWhitespace} from "../utils.js";
-import {Exited, LoadedItemsUpdate} from "../../wailsjs/go/main/App.js";
+import {LoadedItemsUpdate} from "../../wailsjs/go/main/App.js";
+import {Quit} from "../../wailsjs/runtime/runtime.js";
+
 // 定义一个匹配6个数字的正则表达式
 const regex = /^\d{6}$/;
+
 const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
     const {t} = useTranslation()
     const { PassDtoReceived, setPassDtoReceived } = useContext(PassDtoContext)
@@ -28,8 +31,7 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
     const handleCancel = () => {
         if (isNullOrWhitespace(lockPwd)){
             // 原先没有设置启动密码，强制设置启动密码却点击了取消，则直接退出程序
-            Exited()
-            return
+            Quit()
         }
         //  原先设置有启动密码，修改启动密码时点击了取消，则关闭模态
         setIsModalOpen(false);
@@ -50,19 +52,18 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
         }
         // 存储新的启动密码
         PassDtoReceived.loadedItems.preferences.lockPwd =  pwdInputValues.one;
-        lockPwd = pwdInputValues.one;
         // 传递给Go更新本地
         LoadedItemsUpdate(PassDtoReceived.loadedItems)
         .then(()=>{
-            // 更新数据
-            setPassDtoReceived({...PassDtoReceived})
-            handleCancel();
             message.success(t("lockPwdSetTipDoneInformation"))
+            handleCancel();
             // 重新加载界面
             setTimeout(()=>{window.location.reload()}, 2000)
         })
         .catch((error) =>{
-            message.error(t("dialogShowErrorTitle") + error.message);
+            // 更新失败还是原密码
+            PassDtoReceived.loadedItems.preferences.lockPwd=lockPwd
+            message.error(t("dialogShowErrorTitle") + error);
         })
     };
 

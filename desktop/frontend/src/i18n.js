@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
     en: {
         translation: {
+            "spinningTips": "Executing...",
             "dialogShowInformationTitle": "Prompt",
             "dialogShowErrorTitle": "Error issued-",
             "lockPwdShowConfirmChi": "choose",
@@ -33,8 +34,10 @@ const resources = {
             "donateOpenShowConfirm": "Donations appreciate the need\nfor internet connectivity Get\nappreciation QR codes, list of\nappreciators.This app will not\npass any other data.\nDo you want to continue?",
             "dumpDoneShowInformation": "The data has been backed up to the path \nof your choice that you can use for restore.",
             "restoreInvalidShowCustom": "Restore failed, not a valid Pasecret data file!\n{{.errMsg}}",
-            "restoreDoneShowInformation": "The data has been restored, please reopen.",
-            "restoreBeginShowConfirm": "You are about to restore the backup data,\nThe original local data will not be \nrecoverable after successful restore. \nAre you sure?",
+            "restoreDoneShowInformation": "The data has been restored.",
+            "restoreBeginShowConfirm": "You are about to restore data. If the restore is successful, the original data will be overwritten. sure?",
+            "restoreOkButtonText": "YES！",
+            "restoreCancelButtonText": "NO..",
             "settingTabShowErrorMaintenance": "During maintenance, look forward to it.",
             "categoryCanNotEditTips": "The collation cannot be edited",
             "categoryCanNotDelTips": "The collation cannot be deleted.",
@@ -107,6 +110,7 @@ const resources = {
     },
     zh: {
         translation: {
+            "spinningTips": "正在执行中...",
             "dialogShowInformationTitle": "提示",
             "dialogShowErrorTitle": "错误发生-",
             "lockPwdShowConfirmChi": "选择",
@@ -136,8 +140,10 @@ const resources = {
             "donateOpenShowConfirm": "捐助赞赏需要进行网络连接\n获取赞赏二维码、赞赏者列表。\n本应用不会传递任何其他数据，\n是否继续？",
             "dumpDoneShowInformation": "已备份数据到选择的目录中，可将其用于还原。",
             "restoreInvalidShowCustom": "还原失败，不是有效的Pasecret数据文件！\n{{.errMsg}}",
-            "restoreDoneShowInformation": "数据已还原，请重新打开程序。",
-            "restoreBeginShowConfirm": "你即将还原备份数据，\n还原成功原本地数据将不可恢复。\n确定？",
+            "restoreDoneShowInformation": "数据已还原。",
+            "restoreBeginShowConfirm": "你即将还原数据，还原成功本机原数据将被覆盖。确定吗？",
+            "restoreOkButtonText": "确定",
+            "restoreCancelButtonText": "容我再想..",
             "settingTabShowErrorMaintenance": "维护中，尽情期待。",
             "categoryCanNotEditTips": "该归类不可被编辑。",
             "categoryCanNotDelTips": "该归类不可被删除。",

@@ -38,10 +38,11 @@ func (a *App) DtoJsonFirst() storagedata.PassDto {
 
 // LoadedItemsUpdate 存储更新整个数据到本地，由前端调用
 func (a *App) LoadedItemsUpdate(data *storagedata.LoadedItems) error {
-	fmt.Println("执行LoadedItemsUpdate")
 	if data == nil {
 		return errors.New("data is null or empty")
 	}
+	fmt.Println("执行LoadedItemsUpdate")
+	fmt.Printf("%+v\n", *data)
 	// --dup start 在引用加密更新之前，创建副本给全局变量，否则前端访问全局变量 得到的是引用传递的过后的加密数据
 	tmp := new(storagedata.LoadedItems)
 	err := copier.CopyWithOption(tmp, data, copier.Option{DeepCopy: true})
@@ -70,7 +71,7 @@ func (a *App) Exited() {
 func (a *App) ReloadOpenFileDialog() error {
 	fmt.Println("执行ReloadOpenFileDialog")
 	path, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
-		Title:           "选择备份的数据文件来还原数据/select dumped pasecret file to reload data",
+		Title:           "选择数据文件还原/select file to reload",
 		DefaultFilename: "pasecret-dumped.px",
 		Filters: []runtime.FileFilter{
 			{DisplayName: "Pasecret file", Pattern: "*.px"},
@@ -79,6 +80,11 @@ func (a *App) ReloadOpenFileDialog() error {
 	if err != nil {
 		return err
 	}
+	if common.IsWhiteAndSpace(path) {
+		// 用戶取消了對話框 生成一个不是错误的错误标识给前端判断 返回nil或者空字符代表没有错误，js-catch无法捕获
+		return errors.New("_")
+	}
+
 	r, bytes, err := common.ReadFileAsBytes(path)
 	if !r {
 		return errors.New("致命错误！还原失败，请尝试重试。\n" +
@@ -106,7 +112,7 @@ func (a *App) ReloadOpenFileDialog() error {
 func (a *App) BackupSaveFileDialog() error {
 	fmt.Println("DumpSaveFileDialog")
 	path, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
-		Title:           "选择备份的数据文件来还原数据/select dumped pasecret file to reload data",
+		Title:           "选择备份目录/select backup location",
 		DefaultFilename: "pasecret-dumped.px",
 		Filters: []runtime.FileFilter{
 			{DisplayName: "Pasecret file", Pattern: "*.px"},
@@ -114,6 +120,10 @@ func (a *App) BackupSaveFileDialog() error {
 	})
 	if err != nil {
 		return err
+	}
+	if common.IsWhiteAndSpace(path) {
+		// 用戶取消了對話框 生成一个不是错误的错误标识给前端判断
+		return errors.New("_")
 	}
 	// 从本机读取数据文件
 	r, bytes, err := common.ReadFileAsBytes(common.D_path)

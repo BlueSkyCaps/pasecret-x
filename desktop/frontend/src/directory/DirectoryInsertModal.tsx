@@ -28,14 +28,18 @@ const DirectoryInsertModal = ({isModalOpen,setIsModalOpen}) => {
             "removable": true,
             "renameable": true,
         };
-        // 拷贝为副本更新，否则无法监听到改变而渲染
-        let newObj = {...PassDtoReceived};
+        // 创建一个深拷贝副本
+        let newObj = JSON.parse(JSON.stringify(PassDtoReceived));
         newObj.loadedItems.category.push(c);
-        // 更新渲染
-        setPassDtoReceived(newObj);
+        console.log(newObj)
         // 传递给Go存储
-        LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
-            message.error(t("dialogShowErrorTitle")+error.message);
+        LoadedItemsUpdate(newObj.loadedItems)
+        .then(()=>{
+            // 更新渲染
+            setPassDtoReceived(newObj);
+        })
+        .catch((error) =>{
+            message.error(t("dialogShowErrorTitle")+error);
         });
         handleCancel()
     };

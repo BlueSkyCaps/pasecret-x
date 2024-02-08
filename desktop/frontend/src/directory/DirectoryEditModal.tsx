@@ -8,8 +8,8 @@ let preName= ""
 const DirectoryEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
     const { PassDtoReceived, setPassDtoReceived }:{PassDtoReceived:storagedata.PassDto,setPassDtoReceived:any} = useContext(PassDtoContext)
     // 找到当前编辑的归类夹元素
-    const cs:any = PassDtoReceived.loadedItems.category
-    let editC = cs.find((item) => item.id === modalDisplayData["id"]);
+    // @ts-ignore
+    let editC = PassDtoReceived.loadedItems.category.find((item) => item.id === modalDisplayData["id"]);
     preName = editC.name
     const [name,setName] = useState(editC.name)
     const [description,setDescription] = useState(editC.description)
@@ -21,15 +21,25 @@ const DirectoryEditModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
             message.warning(t("categoryExitedTips"))
             return
         }
-        // 更新当前编辑的归类夹元素，category是数组引用，js中数组是引用传递，
-        // 该元素是PassDtoReceived.loadedItems.category中获取到的，所以直接修改即可更新
-        editC.name =name
-        editC.description =description
-        // 更新渲染
-        setPassDtoReceived(PassDtoReceived);
+
+        // 深拷貝一個临时副本
+        let newObj:storagedata.PassDto = JSON.parse(JSON.stringify(PassDtoReceived));
+        // @ts-ignore
+        let tmpEditC = newObj.loadedItems.category.find((item) => item.id === modalDisplayData["id"]);
+        tmpEditC.name =name
+        tmpEditC.description =description
         // 传递给Go存储
-        LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
-            message.error(t("dialogShowErrorTitle")+error.message);
+        LoadedItemsUpdate(newObj.loadedItems)
+            .then(()=>{
+                // 该元素是PassDtoReceived.loadedItems.category中find()获取到的
+                // category是数组引用，js中数组是引用传递,所以直接修改即可更新
+                editC.name = tmpEditC.name
+                editC.description = tmpEditC.description
+                // 更新渲染
+                setPassDtoReceived({...PassDtoReceived});
+            })
+            .catch((error) =>{
+                message.error(t("dialogShowErrorTitle")+error);
         });
         handleCancel()
     };

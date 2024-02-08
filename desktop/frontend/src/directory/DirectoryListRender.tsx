@@ -71,14 +71,19 @@ function DirectoryListRender({tabChangeBy}) {
                 cancelText: t("categoryInsetCancelButtonText"),
                 okText: t("categoryInsetOkButtonText"),
                 onOk:() => {
-                    PassDtoReceived.loadedItems.category = PassDtoReceived.loadedItems.category.filter((item) => item.id !== id)
+                    // 拷贝一个深副本
+                    let nweObj = JSON.parse(JSON.stringify(PassDtoReceived));
+                    nweObj.loadedItems.category = nweObj.loadedItems.category.filter((item) => item.id !== id)
                     // 继续移除归类夹所属密码项
-                    PassDtoReceived.loadedItems.data = PassDtoReceived.loadedItems.data.filter((item) => item.category_id !== id)
-                    // 拷贝副本重新渲染
-                    setPassDtoReceived({...PassDtoReceived})
+                    nweObj.loadedItems.data = nweObj.loadedItems.data.filter((item) => item.category_id !== id)
                     // 传递给Go存储
-                    LoadedItemsUpdate(PassDtoReceived.loadedItems).catch((error) =>{
-                        message.error(t("dialogShowErrorTitle")+error.message);
+                    LoadedItemsUpdate(nweObj.loadedItems)
+                        .then(()=>{
+                            // 重新渲染
+                            setPassDtoReceived(nweObj)
+                        })
+                        .catch((error) =>{
+                            message.error(t("dialogShowErrorTitle")+error);
                     });
                 }
             });
