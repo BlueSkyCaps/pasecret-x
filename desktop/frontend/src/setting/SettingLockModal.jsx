@@ -55,8 +55,10 @@ const SettingLockModal = ({isModalOpen,setIsModalOpen}) => {
         // 传递给Go更新本地
         LoadedItemsUpdate(PassDtoReceived.loadedItems)
         .then(()=>{
-            message.success(t("lockPwdSetTipDoneInformation"))
+            // 更新成功，存储原密码的变量也赋新值
+            lockPwd = pwdInputValues.one;
             handleCancel();
+            message.success(t("lockPwdSetTipDoneInformation"))
             // 重新加载界面
             setTimeout(()=>{window.location.reload()}, 2000)
         })
