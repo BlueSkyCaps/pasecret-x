@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {message} from "antd";
 import SettingLockModal from "./setting/SettingLockModal";
 
-// 创建上下文
+// 创建全局数据更新访问上下文
 export const PassDtoContext = createContext(null);
 
  function Core() {

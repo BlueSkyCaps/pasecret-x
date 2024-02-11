@@ -54,7 +54,7 @@ const SearchItemsModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
             title: t("SearchDataResultHeaderVDataName"),
             dataIndex: 'name',
             key: 'name',
-            width: 120,
+            width: 110,
             ellipsis: true,
             // 数据单元格的渲染函数，参数分别为当前行的值，当前行数据，行索引
             render: (title, item) => (
@@ -86,7 +86,7 @@ const SearchItemsModal = ({isModalOpen,setIsModalOpen,modalDisplayData}) => {
             title: t("SearchDataResultHeaderVDataRemark"),
             dataIndex: 'remark',
             key: 'remark',
-            width: 150,
+            width: 145,
             ellipsis: true,
         },
         {

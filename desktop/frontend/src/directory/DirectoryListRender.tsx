@@ -110,7 +110,6 @@ function DirectoryListRender({tabChangeBy}) {
                 PassDtoReceived.loadedItems.category.map(b=>(
                     <Col key={b.id} span={8}>
                         <Card
-                            style={{ width: 320 }}
                             hoverable={true}
                             onClick={() => {oneDirectoryClickHandler(b.id)}}
                             actions={[

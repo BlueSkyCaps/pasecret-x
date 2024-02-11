@@ -95,6 +95,7 @@ const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
                         },
                         {
                             type: 'string',
+                            max: 40,
                             whitespace:true,
                             message: t("dataEditNameBlank"),
                         },
@@ -128,7 +129,7 @@ const ItemEditModal = ({isModalOpen, setIsModalOpen, modalDisplayData}) => {
                     label={t("dataEditRemarkLabel")}
                     initialValue={currentEditInitItem.remark}
                 >
-                    <TextArea autoSize={{ minRows: 3,maxRows:6}} placeholder="" onChange={(e)=>{onChangeHandler("remark", e.target.value)}}/>
+                    <TextArea autoSize={{ minRows: 3,maxRows:3}} placeholder="" onChange={(e)=>{onChangeHandler("remark", e.target.value)}}/>
                 </Form.Item>
                 <Form.Item>
                     <Flex  gap="small" justify="end" >

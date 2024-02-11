@@ -1,3 +1,4 @@
 build/bin
 node_modules
 frontend/dist
+/assets/WebView2.109.0.1518.78.x64/

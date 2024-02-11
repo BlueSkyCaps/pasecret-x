@@ -27,7 +27,7 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	// 设置最小窗口大小
-	runtime.WindowSetMinSize(a.ctx, 1000, 700)
+	runtime.WindowSetMinSize(a.ctx, 1040, 650)
 }
 
 // DtoJsonFirst 获取第一次启动时存储的json数据，由前端调用
