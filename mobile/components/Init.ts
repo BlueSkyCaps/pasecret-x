@@ -2,7 +2,8 @@ import * as FileSystem from 'expo-file-system';
 import {appDir, resourceDJson, resourceDPath} from "@/constants/InitResource";
 import {Dispatch, SetStateAction, useState} from "react";
 import {readResourceD} from "@/components/StoreData";
-
+// 导入i18n 这将初始化i18n的配置
+import './i18n.js';
 
 let inited:boolean;
 let setInited:Dispatch<SetStateAction<boolean>>;

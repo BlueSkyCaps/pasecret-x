@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/Themed';
-import AddCategoryScreen from "@/app/category/add";
+import AddCategoryScreen from "@/app/(category)/add";
 
 export default function EditCategoryScreen() {
   return (
