@@ -10,7 +10,7 @@ import {router} from "expo-router";
 
 let addClickedCounter = 0;
 let addClickedStr = "";
-export default function LockScreen() {
+export default function LockRender() {
     const colorScheme = useColorScheme();
     const {t} = useTranslation();
     const {loadedItemsState} = useContext(LoadedItemsStateContext) as {
@@ -25,7 +25,7 @@ export default function LockScreen() {
         if (addClickedCounter >= 6) {
             if (addClickedStr === "123456") {
                 // 使用replace替换当前堆栈导航页，而不是push往后追加，tabs就是首页，后退即退出
-                router.replace("/(tabs)/tabIndex")
+                router.replace("../../(tabs)")
                 // end ignore all logic
             } else {
                 alert("密码错误")

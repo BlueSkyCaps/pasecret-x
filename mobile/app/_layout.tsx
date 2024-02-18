@@ -7,7 +7,7 @@ import {createContext, useContext, useEffect, useState} from 'react';
 import {useColorScheme} from "react-native";
 import { useInit} from "@/components/Init";
 import {storagedata} from "@/components/Models";
-import {_LoadedItems} from "@/components/StoreData";
+import {_LoadedItems_Save} from "@/components/StoreData";
 import {isNullOrEmpty} from "@/components/utils";
 
 
@@ -16,6 +16,11 @@ export {
   ErrorBoundary,
 } from 'expo-router';
 
+/*
+* 此为根路由导航 在此定义其余文件夹的基路由堆栈
+* 如，定义最外层导航顶栏显示与否
+*
+* */
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 // 呈现启动画面 你可以选择等待资源加载完毕后隐藏 启动画面在app.json中设置
@@ -49,7 +54,7 @@ export default function RootLayout() {
     // 初始化化数据文件完毕时 inited为true
     if (loaded && inited){
       SplashScreen.hideAsync();
-      setLoadedItemsState(_LoadedItems)
+      setLoadedItemsState(_LoadedItems_Save)
     }
   }, [loaded, inited]);
 
@@ -73,10 +78,11 @@ export default function RootLayout() {
               {/*注意 必须设置一个index命名的索引组件，expo才能找到，否则报路由找不到错误 注意不要//注释 initialRouteName没效果*/}
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="search" options={{ headerShown: true }} />
-              {/*选项卡*/}
+              {/*选项卡 (tabs) 相当于找文件名为(tabs)/index的*/}
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              {/*app 此处不设置是否显示顶部标题栏，由其内部具体自主设置 */}
+              {/*不设置是否显示顶部标题栏，由其内部具体自主设置 */}
               <Stack.Screen name="(category)" options={{ headerShown: false }} />
+              <Stack.Screen name="(category-item)" options={{ headerShown: false }} />
               <Stack.Screen name="(setting)/setLock" options={{ headerShown: false }} />
             </Stack>
           </LoadedItemsStateContext.Provider>

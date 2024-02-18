@@ -18,7 +18,7 @@ export default function TabLayout() {
         headerShown:false,
       }}>
       <Tabs.Screen
-        name="tabIndex"
+        name="index"
         options={{
             // 设置标签页顶栏 标题的样式
             headerTitleStyle:{display:"none"},
