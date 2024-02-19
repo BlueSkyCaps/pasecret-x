@@ -1,8 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import {FlatList, Platform, Pressable, StyleSheet, useColorScheme} from 'react-native';
 
-import { Text, View } from '@/components/Themed';
-import SearchItemsScreen from "@/app/search";
 import {router, useLocalSearchParams, useNavigation} from "expo-router";
 import {useRoute} from "@react-navigation/core";
 import {string} from "prop-types";
@@ -72,15 +69,29 @@ export default function IndexCategoryItems() {
                 />
             )}
         >
-          <Pressable onPress={()=>{itemEditClicked(item.id, item.category_id)}}>
-            <ListItem.Content  style={{backgroundColor:Colors[colorScheme ?? 'light'].background, marginLeft:100}}>
-              <ListItem.Title style={{color:Colors[colorScheme ?? 'light'].text, fontSize:18}}>{item.name}</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Chevron />
+          <Pressable onPress={()=>{itemCopyClicked(item.id, item.category_id)}} style={({ pressed }) => [
+              {
+                  backgroundColor: pressed
+                      ? 'rgba(210, 230, 255, 0.6)'
+                      : Colors[colorScheme ?? 'light'].background
+              },
+          ]}>
+            <Feather name="copy" size={24} color={Colors[colorScheme ?? 'light'].text} style={{marginLeft:10,marginRight:10}} />
           </Pressable>
-            <Pressable onPress={()=>{itemCopyClicked(item.id, item.category_id)}}>
-                <Feather name="copy" size={24} color={Colors[colorScheme ?? 'light'].text} style={{marginLeft:0}}/>
-            </Pressable>
+          <ListItem.Chevron />
+          <Pressable onPress={()=>{itemEditClicked(item.id, item.category_id)}}>
+            <ListItem.Content  style={{backgroundColor:Colors[colorScheme ?? 'light'].background, marginLeft:10}}>
+                <Pressable  onPress={()=>{itemEditClicked(item.id, item.category_id)}} style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed
+                            ? 'rgba(210, 230, 255, 0.6)'
+                            : Colors[colorScheme ?? 'light'].background
+                    },
+                ]}>
+                    <ListItem.Title style={{color:Colors[colorScheme ?? 'light'].text, fontSize:18}}>{item.name}</ListItem.Title>
+                </Pressable>
+            </ListItem.Content>
+          </Pressable>
         </ListItem.Swipeable>
     )
   }

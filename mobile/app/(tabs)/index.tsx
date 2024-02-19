@@ -18,11 +18,17 @@ export default function TabIndexScreen() {
         loadedItemsState: storagedata.LoadedItems;
     }
     const categoryDelClicked = (id:string) => {
-        alert(id)
-
+        if (parseInt(id)<=4){
+            alert(t("categoryCanNotEditTips"))
+            return
+        }
     }
     const categoryEditClicked = (id:string) => {
-        alert(id)
+        if (parseInt(id)<=4){
+            alert(t("categoryCanNotEditTips"))
+            return
+        }
+        return alert(id)
     }
     // 点击了某个归类夹，导航到密码项列表页
     const categoryClicked = (id:string,name:string) => {
@@ -63,14 +69,28 @@ export default function TabIndexScreen() {
                         />
                     )}
                 >
-                <AntDesign name="folderopen" size={24} color={Colors[colorScheme ?? 'light'].text} style={{margin:20}}/>
-                <Pressable onPress={()=>{categoryClicked(item.id, item.name)}}>
-                    <ListItem.Content style={{backgroundColor:Colors[colorScheme ?? 'light'].background}}>
+                <Pressable onPress={()=>{categoryClicked(item.id, item.name)}} style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed
+                            ? 'rgba(210, 230, 255, 0.5)'
+                            : Colors[colorScheme ?? 'light'].background
+                    },
+                ]}>
+                    <AntDesign name="folderopen" size={24} color={Colors[colorScheme ?? 'light'].text} style={{marginLeft:10, marginRight:10}}/>
+                </Pressable>
+                <ListItem.Chevron />
+                <ListItem.Content style={{backgroundColor:Colors[colorScheme ?? 'light'].background}}>
+                    <Pressable onPress={()=>{categoryClicked(item.id, item.name)}} style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? 'rgba(210, 230, 255, 0.5)'
+                                : Colors[colorScheme ?? 'light'].background
+                        },
+                    ]}>
                         <ListItem.Title style={{color:Colors[colorScheme ?? 'light'].text, fontSize:20}}>{item.name}</ListItem.Title>
                         <ListItem.Subtitle style={{color:Colors[colorScheme ?? 'light'].text}}>{item.description}</ListItem.Subtitle>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </Pressable>
+                    </Pressable>
+                </ListItem.Content>
             </ListItem.Swipeable>
         )
     }
