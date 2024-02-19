@@ -1,4 +1,4 @@
-import {FlatList, Pressable, ScrollView, StyleSheet, useColorScheme} from 'react-native';
+import {Alert, FlatList, Platform, Pressable, ScrollView, StyleSheet, ToastAndroid, useColorScheme} from 'react-native';
 
 import {Icon, ListItem} from "@rneui/themed";
 import {Button} from "@rneui/base";
@@ -18,17 +18,36 @@ export default function TabIndexScreen() {
         loadedItemsState: storagedata.LoadedItems;
     }
     const categoryDelClicked = (id:string) => {
+        // 提示内置归类夹不可删除
         if (parseInt(id)<=4){
-            alert(t("categoryCanNotEditTips"))
-            return
+            // 安卓 用toast提示，简单明了，ios用alert
+            if (Platform.OS==='android'){
+                ToastAndroid.showWithGravity(t("categoryCanNotDelTips"), ToastAndroid.SHORT, ToastAndroid.CENTER);
+                return;
+            }
+            Alert.alert(t("dialogShowInformationTitle"), t("categoryCanNotDelTips"), [
+                {
+                    text: t("directoryInfoOkText"),
+                    onPress: () => console.log('Ask me later pressed'),
+                }]
+            );
         }
+
     }
     const categoryEditClicked = (id:string) => {
+        // 提示内置归类夹不可编辑
         if (parseInt(id)<=4){
-            alert(t("categoryCanNotEditTips"))
-            return
+            if (Platform.OS==='android'){
+                ToastAndroid.showWithGravity(t("categoryCanNotEditTips"), ToastAndroid.SHORT, ToastAndroid.CENTER);
+                return;
+            }
+            Alert.alert(t("dialogShowInformationTitle"), t("categoryCanNotEditTips"), [
+                {
+                    text: t("directoryInfoOkText"),
+                    onPress: () => console.log('Ask me later pressed'),
+                }]
+            );
         }
-        return alert(id)
     }
     // 点击了某个归类夹，导航到密码项列表页
     const categoryClicked = (id:string,name:string) => {
