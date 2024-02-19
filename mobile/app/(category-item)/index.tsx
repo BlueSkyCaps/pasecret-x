@@ -37,63 +37,63 @@ export default function IndexCategoryItems() {
     }
 
     const renderItem = ({item}:{item:storagedata.Data}) => {
-    return (
-        <ListItem.Swipeable
-            key={item.id}
-            bottomDivider={true}
-            containerStyle={{backgroundColor:Colors[colorScheme ?? 'light'].background}}
-            leftWidth={80}
-            rightWidth={90}
-            leftContent={() => (
-                <Button
-                    containerStyle={{
-                      flex: 1,
-                      justifyContent: "center",
-                      backgroundColor: Colors[colorScheme ?? 'light'].background,
-                    }}
-                    type="clear"
-                    icon={<AntDesign name="delete" size={24} color={Colors[colorScheme ?? 'light'].text} />}
-                    onPress={()=> itemDelClicked(item.id, item.category_id)}
-                />
-            )}
-            rightContent={() => (
-                <Button
-                    containerStyle={{
-                        flex: 1,
-                        justifyContent: "center",
-                        backgroundColor: Colors[colorScheme ?? 'light'].background,
-                    }}
-                    type="clear"
-                    icon={<AntDesign name="delete" size={24} color={Colors[colorScheme ?? 'light'].text} />}
-                    onPress={()=> itemDelClicked(item.id, item.category_id)}
-                />
-            )}
-        >
-          <Pressable onPress={()=>{itemCopyClicked(item.id, item.category_id)}} style={({ pressed }) => [
-              {
-                  backgroundColor: pressed
-                      ? 'rgba(210, 230, 255, 0.6)'
-                      : Colors[colorScheme ?? 'light'].background
-              },
-          ]}>
-            <Feather name="copy" size={24} color={Colors[colorScheme ?? 'light'].text} style={{marginLeft:10,marginRight:10}} />
-          </Pressable>
-          <ListItem.Chevron />
-          <Pressable onPress={()=>{itemEditClicked(item.id, item.category_id)}}>
-            <ListItem.Content  style={{backgroundColor:Colors[colorScheme ?? 'light'].background, marginLeft:10}}>
-                <Pressable  onPress={()=>{itemEditClicked(item.id, item.category_id)}} style={({ pressed }) => [
-                    {
-                        backgroundColor: pressed
-                            ? 'rgba(210, 230, 255, 0.6)'
-                            : Colors[colorScheme ?? 'light'].background
-                    },
-                ]}>
-                    <ListItem.Title style={{color:Colors[colorScheme ?? 'light'].text, fontSize:18}}>{item.name}</ListItem.Title>
-                </Pressable>
-            </ListItem.Content>
-          </Pressable>
-        </ListItem.Swipeable>
-    )
+        return (
+            <ListItem.Swipeable
+                key={item.id}
+                bottomDivider={true}
+                containerStyle={{backgroundColor:Colors[colorScheme ?? 'light'].background}}
+                leftWidth={80}
+                rightWidth={90}
+                leftContent={() => (
+                    <Button
+                        containerStyle={{
+                          flex: 1,
+                          justifyContent: "center",
+                          backgroundColor: Colors[colorScheme ?? 'light'].background,
+                        }}
+                        type="clear"
+                        icon={<AntDesign name="delete" size={24} color={Colors[colorScheme ?? 'light'].text} />}
+                        onPress={()=> itemDelClicked(item.id, item.category_id)}
+                    />
+                )}
+                rightContent={() => (
+                    <Button
+                        containerStyle={{
+                            flex: 1,
+                            justifyContent: "center",
+                            backgroundColor: Colors[colorScheme ?? 'light'].background,
+                        }}
+                        type="clear"
+                        icon={<AntDesign name="delete" size={24} color={Colors[colorScheme ?? 'light'].text} />}
+                        onPress={()=> itemDelClicked(item.id, item.category_id)}
+                    />
+                )}
+            >
+              <Pressable onPress={()=>{itemCopyClicked(item.id, item.category_id)}} style={({ pressed }) => [
+                  {
+                      backgroundColor: pressed
+                          ? 'rgba(210, 230, 255, 0.6)'
+                          : Colors[colorScheme ?? 'light'].background
+                  },
+              ]}>
+                <Feather name="copy" size={24} color={Colors[colorScheme ?? 'light'].text} style={{marginLeft:10,marginRight:10}} />
+              </Pressable>
+              <ListItem.Chevron />
+              <Pressable onPress={()=>{itemEditClicked(item.id, item.category_id)}}>
+                <ListItem.Content  style={{backgroundColor:Colors[colorScheme ?? 'light'].background, marginLeft:10}}>
+                    <Pressable  onPress={()=>{itemEditClicked(item.id, item.category_id)}} style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? 'rgba(210, 230, 255, 0.6)'
+                                : Colors[colorScheme ?? 'light'].background
+                        },
+                    ]}>
+                        <ListItem.Title style={{color:Colors[colorScheme ?? 'light'].text, fontSize:18}}>{item.name}</ListItem.Title>
+                    </Pressable>
+                </ListItem.Content>
+              </Pressable>
+            </ListItem.Swipeable>
+        )
   }
   return (
       <FlatList data={items} renderItem={renderItem}/>

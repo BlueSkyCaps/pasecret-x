@@ -1,17 +1,55 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import {Platform, StyleSheet, useColorScheme} from 'react-native';
 
 import { Text, View } from '@/components/Themed';
 import AddCategoryScreen from "@/app/(category)/add";
+import {useLocalSearchParams, useNavigation} from "expo-router";
+import {string} from "prop-types";
+import {useTranslation} from "react-i18next";
+import React, {useContext} from "react";
+import {LoadedItemsStateContext} from "@/app/_layout";
+import {storagedata} from "@/components/Models";
+import {Input} from "@rneui/themed";
+import {Button} from "@rneui/base";
 
 export default function EditCategoryScreen() {
+  const navigation = useNavigation();
+  const colorScheme = useColorScheme();
+  const {cid,name}= useLocalSearchParams<{ cid: string, name:string}>();
+  const {t} = useTranslation();
+  const {loadedItemsState} = useContext(LoadedItemsStateContext) as {
+    loadedItemsState: storagedata.LoadedItems;
+  }
+  const inputName = React.createRef();
+  const inputDescription = React.createRef();
+
+  // 修改当前导航栏的标题
+  navigation.setOptions({headerTitle: t("categoryEditWindowTitle")+': '+name});
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>EditCategory</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      <Input
+          placeholder={t("categoryInsetNameLabel")}
+          errorStyle={{ color: 'pink' }}
+          errorMessage={t("categoryInsetNameLength")}
+      />
+      <Input
+          placeholder={t("categoryInsetDescriptionLabel")}
+          errorStyle={{ color: 'pink' }}
+          errorMessage={t("categoryInsetDescriptionLength")}
+      />
+      <Button
+          title={t("categoryInsetOkButtonText")}
+          buttonStyle={{
+            borderColor: 'rgba(78, 116, 289, 1)',
+          }}
+          type="outline"
+          titleStyle={{ color: 'rgba(78, 116, 289, 1)' }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 50,
+            marginVertical: 10,
+          }}
+      />
     </View>
   );
 }
@@ -23,12 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    fontSize: 16,
+    fontWeight: 'normal',
   },
 });

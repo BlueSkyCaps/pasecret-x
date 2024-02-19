@@ -9,6 +9,8 @@ import {useTranslation} from "react-i18next";
 import {LoadedItemsStateContext} from "@/app/_layout";
 import {storagedata} from "@/components/Models";
 import {router, useNavigation} from "expo-router";
+import {_LoadedItems_Save} from "@/components/StoreData";
+import {createAndWriteResourceD} from "@/components/Init";
 
 // tabs默认第一页选项卡 显示的是归类夹列表
 export default function TabIndexScreen() {
@@ -17,7 +19,7 @@ export default function TabIndexScreen() {
     const {loadedItemsState} = useContext(LoadedItemsStateContext) as {
         loadedItemsState: storagedata.LoadedItems;
     }
-    const categoryDelClicked = (id:string) => {
+    const categoryDelClicked = (id:string, name :string) => {
         // 提示内置归类夹不可删除
         if (parseInt(id)<=4){
             // 安卓 用toast提示，简单明了，ios用alert
@@ -28,13 +30,40 @@ export default function TabIndexScreen() {
             Alert.alert(t("dialogShowInformationTitle"), t("categoryCanNotDelTips"), [
                 {
                     text: t("directoryInfoOkText"),
-                    onPress: () => console.log('Ask me later pressed'),
                 }]
             );
         }
+        // 显示确认删除对话框
+        Alert.alert(t("dialogShowInformationTitle"), t("categoryDelConfirmMsg", {"name":name}), [
+            {
+                text: t("categoryDelConfirmCancelText"),
+                style: 'cancel',
+            },
+            {text: t("categoryDelConfirmCancelText"),
+                onPress: () =>{
+                    // 删除归类夹及其所有密码项 并更新至本地存储
+                    let deep_tmp_category:storagedata.Category[] = JSON.parse(JSON.stringify(_LoadedItems_Save.category));
+                    let deep_tmp_data:storagedata.Data[] = JSON.parse(JSON.stringify(_LoadedItems_Save.data));
+                    _LoadedItems_Save.category=_LoadedItems_Save.category.filter((item)=>item.id!==id)
+                    _LoadedItems_Save.data = _LoadedItems_Save.data.filter((item)=>item.category_id!==id)
+                    try {
+                        createAndWriteResourceD(JSON.stringify(_LoadedItems_Save)).then(r => {
+                            // 回调执行表示保存成功，同步执行渲染
+                            loadedItemsState.category=loadedItemsState.category.filter((item)=>item.id!==id)
+                            loadedItemsState.data = loadedItemsState.data.filter((item)=>item.category_id!==id)
+                        });
+                    }catch (err:any){
+                        // 捕获异常，回滚全局数据
+                        _LoadedItems_Save.category = deep_tmp_category
+                        _LoadedItems_Save.data = deep_tmp_data
+                        alert(err.message)
+                    }
+            }},
+        ]);
+
 
     }
-    const categoryEditClicked = (id:string) => {
+    const categoryEditClicked = (id:string, name:string) => {
         // 提示内置归类夹不可编辑
         if (parseInt(id)<=4){
             if (Platform.OS==='android'){
@@ -48,6 +77,8 @@ export default function TabIndexScreen() {
                 }]
             );
         }
+        // 跳转编辑归类夹页
+        router.push({pathname:'/(category)/edit', params:{id:id, name:name}})
     }
     // 点击了某个归类夹，导航到密码项列表页
     const categoryClicked = (id:string,name:string) => {
@@ -72,7 +103,7 @@ export default function TabIndexScreen() {
                             }}
                             type="clear"
                             icon={<AntDesign name="delete" size={24} color={Colors[colorScheme ?? 'light'].text} />}
-                            onPress={()=> categoryDelClicked(item.id)}
+                            onPress={()=> categoryDelClicked(item.id, item.name)}
                         />
                     )}
                     rightContent={() => (
@@ -84,7 +115,7 @@ export default function TabIndexScreen() {
                             }}
                             type="clear"
                             icon={<Feather name="edit" size={24} color={Colors[colorScheme ?? 'light'].text} />}
-                            onPress={()=>{categoryEditClicked(item.id)}}
+                            onPress={()=>{categoryEditClicked(item.id,item.name)}}
                         />
                     )}
                 >

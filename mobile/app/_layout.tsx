@@ -7,7 +7,7 @@ import {createContext, useContext, useEffect, useState} from 'react';
 import {useColorScheme} from "react-native";
 import { useInit} from "@/components/Init";
 import {storagedata} from "@/components/Models";
-import {_LoadedItems_Save} from "@/components/StoreData";
+import {_LoadedItems, _LoadedItems_Save} from "@/components/StoreData";
 import {isNullOrEmpty} from "@/components/utils";
 
 
@@ -54,9 +54,11 @@ export default function RootLayout() {
     // 初始化化数据文件完毕时 inited为true
     if (loaded && inited){
       SplashScreen.hideAsync();
-      setLoadedItemsState(_LoadedItems_Save)
+      setLoadedItemsState(_LoadedItems)
+
     }
   }, [loaded, inited]);
+
 
   if (!(loaded && inited))
   {
