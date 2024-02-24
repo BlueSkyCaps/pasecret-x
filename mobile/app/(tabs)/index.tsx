@@ -24,7 +24,7 @@ export default function TabIndexScreen() {
         if (parseInt(id)<=4){
             // 安卓 用toast提示，简单明了，ios用alert
             if (Platform.OS==='android'){
-                ToastAndroid.showWithGravity(t("categoryCanNotDelTips"), ToastAndroid.SHORT, ToastAndroid.CENTER);
+                ToastAndroid.showWithGravity(t("categoryCanNotDelTips"), ToastAndroid.SHORT, ToastAndroid.TOP);
                 return;
             }
             Alert.alert(t("dialogShowInformationTitle"), t("categoryCanNotDelTips"), [
@@ -65,9 +65,9 @@ export default function TabIndexScreen() {
     }
     const categoryEditClicked = (id:string, name:string) => {
         // 提示内置归类夹不可编辑
-        if (parseInt(id)<=4){
+        if (parseInt(id)==4){
             if (Platform.OS==='android'){
-                ToastAndroid.showWithGravity(t("categoryCanNotEditTips"), ToastAndroid.SHORT, ToastAndroid.CENTER);
+                ToastAndroid.showWithGravity(t("categoryCanNotEditTips"), ToastAndroid.SHORT, ToastAndroid.TOP);
                 return;
             }
             Alert.alert(t("dialogShowInformationTitle"), t("categoryCanNotEditTips"), [
