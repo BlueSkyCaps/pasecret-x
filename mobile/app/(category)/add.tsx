@@ -1,18 +1,119 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import {StyleSheet, useColorScheme} from 'react-native';
 
-import { Text, View } from '@/components/Themed';
-import SearchItemsScreen from "@/app/search";
+import {View} from '@/components/Themed';
+import {useLocalSearchParams, useNavigation} from "expo-router";
+import {useTranslation} from "react-i18next";
+import React, {createRef, useContext, useRef, useState} from "react";
+import {LoadedItemsStateContext} from "@/app/_layout";
+import {storagedata} from "@/components/Models";
+import {Input} from "@rneui/themed";
+import {Button} from "@rneui/base";
+import {isNullOrWhitespace} from "@/components/utils";
 
 export default function AddCategoryScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>AddCategory</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+  const navigation = useNavigation();
+  const colorScheme = useColorScheme();
+  const {id,name}= useLocalSearchParams<{ id: string, name:string}>();
+  const {t} = useTranslation();
+  const {loadedItemsState} = useContext(LoadedItemsStateContext) as {
+    loadedItemsState: storagedata.LoadedItems;
+  }
+  const category = loadedItemsState.category.find(c => c.id === id);
+  const inputName:any = createRef();
+  const inputDescription:any = createRef();
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+  // 新增状态下 先显示错误提示文本
+  const [inputNameErrormsg,setInputNameErrormsg]:any = useState(t("categoryInsetNameLength"));
+  const [inputDescriptionErrormsg,setInputDescriptionErrormsg]:any = useState(t("categoryInsetDescriptionLength"));
+
+  const [passed,setPassed] =useState<{ [_: string]: boolean }>({
+    // 新增状态下  这些属性一定是初始化没有值的 为false
+    inputName: false,
+    inputDescription: false,
+  });
+
+  // 修改当前导航栏的标题
+  navigation.setOptions({headerTitle: t("categoryEditWindowTitle")+': '+name});
+
+  // 验证输入的值满足条件与否
+  function rulesHandler(inputRef:any, text:string) {
+    console.log(text)
+    inputRef.current.value = text;
+    switch (inputRef.current.props.labelProps.refName) {
+      case  "inputName":
+        setInputNameErrormsg('')
+        passed.inputName=false
+        setPassed(passed)
+        if (isNullOrWhitespace(inputRef.current.value)||inputRef.current.value.length>10) {
+          setInputNameErrormsg(t(inputRef.current.props.labelProps.tKey))
+          return;
+        }
+        passed.inputName=true
+        setPassed(passed)
+        break;
+      case  "inputDescription":
+        setInputDescriptionErrormsg('')
+        passed.inputDescription=false
+        setPassed(passed)
+        if (isNullOrWhitespace(inputRef.current.value)||inputRef.current.value.length>24){
+          setInputDescriptionErrormsg(t(inputRef.current.props.labelProps.tKey))
+          return;
+        }
+        passed.inputDescription=true
+        setPassed(passed)
+        break;
+      default:
+        break;
+    }
+    console.log(inputRef.current.props.errorMessage)
+  }
+
+  function submitHandler() {
+    console.log(passed)
+    // 需要验证规则的 有一个为false 则不通过
+    for (let key in passed) {
+      if(!passed[key]){
+        alert("没通过")
+        return
+      }
+    }
+  }
+
+  return (
+      <View style={styles.container}>
+        <Input
+            defaultValue={category?.name}
+            ref={inputName}
+            labelProps={{refName:"inputName", tKey: "categoryInsetNameLength"}}
+            placeholder={t("categoryInsetNameLabel")}
+            errorStyle={{ color: 'pink' }}
+            errorMessage={inputNameErrormsg}
+            onChangeText={(text)=>{rulesHandler(inputName, text)}}
+        />
+        <Input
+            defaultValue={category?.description}
+            ref={inputDescription}
+            labelProps={{refName:"inputDescription", tKey: "categoryInsetDescriptionLength"}}
+            placeholder={t("categoryInsetDescriptionLabel")}
+            errorStyle={{ color: 'pink' }}
+            errorMessage={inputDescriptionErrormsg}
+            onChangeText={(text)=>{rulesHandler(inputDescription, text)}}
+        />
+        <Button
+            title={t("categoryInsetOkButtonText")}
+            buttonStyle={{
+              borderColor: 'rgba(78, 116, 289, 1)',
+            }}
+            type="outline"
+            titleStyle={{ color: 'rgba(78, 116, 289, 1)' }}
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 10,
+            }}
+            onPress={()=>{submitHandler()}}
+        />
+      </View>
   );
 }
 
@@ -23,12 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    fontSize: 16,
+    fontWeight: 'normal',
   },
 });

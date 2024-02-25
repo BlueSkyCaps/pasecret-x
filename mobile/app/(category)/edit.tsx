@@ -13,44 +13,53 @@ import {isNullOrWhitespace} from "@/components/utils";
 export default function EditCategoryScreen() {
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
-  const {cid,name}= useLocalSearchParams<{ cid: string, name:string}>();
+  const {id,name}= useLocalSearchParams<{ id: string, name:string}>();
   const {t} = useTranslation();
   const {loadedItemsState} = useContext(LoadedItemsStateContext) as {
     loadedItemsState: storagedata.LoadedItems;
   }
-  const [passed,setPassed] =useState([false,false]);
+  const category = loadedItemsState.category.find(c => c.id === id);
   const inputName:any = createRef();
-  const [inputNameErrormsg,setInputNameErrormsg]:any = useState(t("categoryInsetNameLength"));
   const inputDescription:any = createRef();
-  const [inputDescriptionErrormsg,setInputDescriptionErrormsg]:any = useState(t("categoryInsetDescriptionLength"));
+
+  // 编辑状态下 首次进入编辑 不要先显示错误提示文本
+  const [inputNameErrormsg,setInputNameErrormsg]:any = useState();
+  const [inputDescriptionErrormsg,setInputDescriptionErrormsg]:any = useState();
+
+  const [passed,setPassed] =useState<{ [_: string]: boolean }>({
+      // 编辑状态下 首次进入编辑 这些属性一定是初始化有值的
+      inputName: true,
+      inputDescription: true,
+  });
 
     // 修改当前导航栏的标题
     navigation.setOptions({headerTitle: t("categoryEditWindowTitle")+': '+name});
 
     // 验证输入的值满足条件与否
     function rulesHandler(inputRef:any, text:string) {
+        console.log(text)
         inputRef.current.value = text;
         switch (inputRef.current.props.labelProps.refName) {
             case  "inputName":
                 setInputNameErrormsg('')
-                passed[0]=false
+                passed.inputName=false
                 setPassed(passed)
                 if (isNullOrWhitespace(inputRef.current.value)||inputRef.current.value.length>10) {
                     setInputNameErrormsg(t(inputRef.current.props.labelProps.tKey))
                     return;
                 }
-                passed[0]=true
+                passed.inputName=true
                 setPassed(passed)
                 break;
             case  "inputDescription":
                 setInputDescriptionErrormsg('')
-                passed[1]=false
+                passed.inputDescription=false
                 setPassed(passed)
                 if (isNullOrWhitespace(inputRef.current.value)||inputRef.current.value.length>24){
                     setInputDescriptionErrormsg(t(inputRef.current.props.labelProps.tKey))
                     return;
                 }
-                passed[1]=true
+                passed.inputDescription=true
                 setPassed(passed)
                 break;
             default:
@@ -61,14 +70,19 @@ export default function EditCategoryScreen() {
 
     function submitHandler() {
         console.log(passed)
-        if(passed.filter((i)=>!i).length>0){
-            alert("没通过")
+        // 需要验证规则的 有一个为false 则不通过
+        for (let key in passed) {
+            if(!passed[key]){
+                alert("没通过")
+                return
+            }
         }
     }
 
     return (
     <View style={styles.container}>
       <Input
+          defaultValue={category?.name}
           ref={inputName}
           labelProps={{refName:"inputName", tKey: "categoryInsetNameLength"}}
           placeholder={t("categoryInsetNameLabel")}
@@ -77,6 +91,7 @@ export default function EditCategoryScreen() {
           onChangeText={(text)=>{rulesHandler(inputName, text)}}
       />
       <Input
+          defaultValue={category?.description}
           ref={inputDescription}
           labelProps={{refName:"inputDescription", tKey: "categoryInsetDescriptionLength"}}
           placeholder={t("categoryInsetDescriptionLabel")}
