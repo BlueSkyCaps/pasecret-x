@@ -33,7 +33,7 @@ export default function AddCategoryScreen() {
   });
 
   // 修改当前导航栏的标题
-  navigation.setOptions({headerTitle: t("categoryEditWindowTitle")+': '+name});
+  navigation.setOptions({headerTitle: t("categoryInsetWindowTitle")+': '+name});
 
   // 验证输入的值满足条件与否
   function rulesHandler(inputRef:any, text:string) {
