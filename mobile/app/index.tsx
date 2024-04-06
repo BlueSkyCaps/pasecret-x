@@ -1,8 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet } from 'react-native';
 
-import { Text, View } from '@/components/Themed';
-import {Link} from "expo-router";
 import {useContext, useEffect, useState} from "react";
 import {LoadedItemsStateContext} from "@/app/_layout";
 import {storagedata} from "@/components/Models";
