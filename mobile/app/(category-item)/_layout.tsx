@@ -23,7 +23,7 @@ export default function CategoryLayout() {
 
   return (
         <Stack>
-          {/*  该堆栈导航 由(tabs)/index也就是归类夹列表页导航显示*/}
+          {/*  该堆栈导航 由(tabs)/index也就是归类夹列表页导航出现*/}
           <Stack.Screen name="index" options={{
               headerShown: true,
               // 设置标签页顶栏 右部分显示的样式

@@ -29,8 +29,10 @@ export default function IndexScreen() {
     return <LockRender/>
       // return <SetLockScreen/>
   }
+
   // 渲染 解锁界面
   return (
+
       <LockRender/>
   );
 }
